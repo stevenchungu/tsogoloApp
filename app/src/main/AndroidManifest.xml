@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.tsogolo">
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Tsogolo">
+        <activity
+            android:name=".ui.FirstLaunchActivity"
+            android:exported="false"
+            android:label="@string/title_activity_first_launch"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.personality.PersonalityDescriptionActivity"
+            android:exported="false"
+            android:label="@string/title_activity_personality_description"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.career.CareerGuideActivity"
+            android:exported="false"
+            android:label="@string/title_activity_career_guide"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.personality.PersonalityTestActivity"
+            android:exported="false"
+            android:label="@string/title_activity_personality_test"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.career.CareerFinderActivity"
+            android:exported="false"
+            android:label="@string/title_activity_career_finder"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.profile.ProfilingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_profiling"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Tsogolo.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

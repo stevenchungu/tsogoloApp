@@ -1,0 +1,636 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "e31d390cfd8b41a7b21fce16fae17daa",
+    "entities": [
+      {
+        "tableName": "Career",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT, `description` TEXT, `aas` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "aas",
+            "columnName": "aas",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "College",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `isPublic` INTEGER NOT NULL, `isAccredited` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isPublic",
+            "columnName": "isPublic",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAccredited",
+            "columnName": "isAccredited",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "CollegeProgram",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`programId` INTEGER NOT NULL, `collegeId` INTEGER NOT NULL, PRIMARY KEY(`collegeId`, `programId`), FOREIGN KEY(`programId`) REFERENCES `Program`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`collegeId`) REFERENCES `College`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "programId",
+            "columnName": "programId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "collegeId",
+            "columnName": "collegeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "collegeId",
+            "programId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Program",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "programId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "College",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "collegeId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Personality",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `type` TEXT, `description` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PersonalityQuestion",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `question` TEXT, `agreeType` TEXT NOT NULL, `denialType` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "question",
+            "columnName": "question",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "agreeType",
+            "columnName": "agreeType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "denialType",
+            "columnName": "denialType",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PersonalitySuitableCareer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`personalityId` INTEGER NOT NULL, `careerId` INTEGER NOT NULL, PRIMARY KEY(`personalityId`, `careerId`), FOREIGN KEY(`personalityId`) REFERENCES `Personality`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`careerId`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "personalityId",
+            "columnName": "personalityId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "careerId",
+            "columnName": "careerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "personalityId",
+            "careerId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Personality",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "personalityId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Career",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "careerId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "PreferredCareer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `careerId` INTEGER NOT NULL, `rank` INTEGER NOT NULL, PRIMARY KEY(`userId`, `careerId`), FOREIGN KEY(`userId`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`careerId`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "careerId",
+            "columnName": "careerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rank",
+            "columnName": "rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "userId",
+            "careerId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "User",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "userId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Career",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "careerId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Program",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `duration` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ProgramCareer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`programId` INTEGER NOT NULL, `careerId` INTEGER NOT NULL, PRIMARY KEY(`programId`, `careerId`), FOREIGN KEY(`programId`) REFERENCES `Program`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`careerId`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "programId",
+            "columnName": "programId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "careerId",
+            "columnName": "careerId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "programId",
+            "careerId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Program",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "programId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Career",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "careerId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "ProgramRequirement",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`programId` INTEGER NOT NULL, `subjectId` INTEGER NOT NULL, `grade` INTEGER NOT NULL, PRIMARY KEY(`programId`, `subjectId`), FOREIGN KEY(`programId`) REFERENCES `Program`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`subjectId`) REFERENCES `Subject`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "programId",
+            "columnName": "programId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subjectId",
+            "columnName": "subjectId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grade",
+            "columnName": "grade",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "programId",
+            "subjectId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Program",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "programId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "Subject",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "subjectId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "Subject",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `category` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "User",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT, `dob` INTEGER, `eduLevel` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dob",
+            "columnName": "dob",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "eduLevel",
+            "columnName": "eduLevel",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "UserPersonality",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `personalityId` INTEGER NOT NULL, `rank` INTEGER NOT NULL, PRIMARY KEY(`userId`, `personalityId`), FOREIGN KEY(`personalityId`) REFERENCES `Personality`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`userId`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "personalityId",
+            "columnName": "personalityId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rank",
+            "columnName": "rank",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "userId",
+            "personalityId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Personality",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "personalityId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "User",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "userId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "UserSubject",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `subjectId` INTEGER NOT NULL, `grade` INTEGER NOT NULL, PRIMARY KEY(`userId`, `subjectId`), FOREIGN KEY(`subjectId`) REFERENCES `Subject`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`userId`) REFERENCES `User`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subjectId",
+            "columnName": "subjectId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grade",
+            "columnName": "grade",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "userId",
+            "subjectId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Subject",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "subjectId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "User",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "userId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e31d390cfd8b41a7b21fce16fae17daa')"
+    ]
+  }
+}

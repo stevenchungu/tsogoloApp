@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="emarald_200">#FFa7f3d0</color>
+    <color name="emarald_500">#FF10b981</color>
+    <color name="emarald_700">#FF047857</color>
+    <color name="rose_200">#fffda4af</color>
+    <color name="rose_700">#FFf43f5e</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="gray">#bbe</color>
+    <color name="dark_blue">#ff1e293b</color>
+</resources>
