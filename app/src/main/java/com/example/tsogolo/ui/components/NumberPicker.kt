@@ -95,7 +95,7 @@ fun NumberPicker(
     ) {
         val spacing = 4.dp
 
-        val arrowColor = MaterialTheme.colors.primary
+        val arrowColor = Color.Black
 
         Arrow(direction = ArrowDirection.UP, tint = arrowColor)
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -31,36 +32,43 @@ import com.example.tsogolo.ui.theme.Typography
 fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit) {
     val stateData = viewModel.profileData
 
-    Column(modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()) {
+    Column(modifier = Modifier
+        .background(color = MaterialTheme.colors.background)
+        .fillMaxSize()) {
         TopAppBar(
             title = { Text("Create Profile") },
             backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.primary,
+            contentColor = Color.Black,
             navigationIcon = { Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back Arrow",
                 Modifier.clickable { backArrowClicked() },
-                tint = MaterialTheme.colors.primary
+                tint = Color.Black
             ) },
         )
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Text(
                 text = "Fill the form below then click the save profile button.",
-                modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp).align(Alignment.CenterHorizontally),
-                style = Typography.body1.copy(color = MaterialTheme.colors.primary, fontFamily = FontFamily.Cursive)
+                modifier = Modifier
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    .align(Alignment.CenterHorizontally),
+                style = Typography.body1.copy(color = Color.Black, fontFamily = FontFamily.SansSerif)
             )
 
             Column(modifier = Modifier.padding(16.dp)) {
                 OutlinedTextField(
                     value = stateData.value.name.value, onValueChange = {viewModel.nameChanged(it)},
-                    label = { Text(text = "Enter your name") },
+                    label = { Text(text = "Enter your name",
+                        color = Color.Black
+                    ) },
                     modifier = Modifier
                         .width(IntrinsicSize.Max)
                         .padding(all = 8.dp),
+                    colors = TextFieldDefaults.outlinedTextFieldColors(
+                        focusedBorderColor = Color(0xFF0eF7729)),
                     textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
                 )
-
                 Divider(modifier = Modifier.padding(top = 16.dp))
 
                 Text(text = "Date of Birth: (Year/Month/Day)",
@@ -111,7 +119,7 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                     )
                 }
 
-                Divider()
+                Divider(modifier = Modifier.padding(top = 16.dp))
 
                 Column {
                     Text(text = "Education Level",
@@ -122,6 +130,9 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                     viewModel.eduLevels.forEach { level ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             RadioButton(selected = level == stateData.value.eduLevel.value,
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = Color(0xFF0eF7729)
+                                ),
                                 onClick = { viewModel.onEdulevelSelected(level) })
                             Text(text = level,
                                 modifier = Modifier.padding(start = 16.dp),
@@ -138,7 +149,7 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                     Text(text = "Grades (Points Scored in Chosen Education Level) A is 1, B is 2...",
                         modifier = Modifier
                             .padding(bottom = 8.dp, top = 16.dp),
-                        style = Typography.body2.copy(color = MaterialTheme.colors.primary)
+
                     )
                     stateData.value.subjectGrades.value.forEachIndexed { i, it ->
                         Row(modifier = Modifier.padding(bottom = 8.dp)) {
@@ -154,7 +165,10 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                                 placeholder = { Text(text = "Points") },
                                 isError = !it.second.isDigitsOnly() && it.second.isNotEmpty(),
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
+                                textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface),
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = Color(0xFF0eF7729),
+                                )
                             )
                         }
                     }
@@ -163,15 +177,22 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Button(onClick = { viewModel.saveProfile() },
-                    modifier = Modifier.fillMaxWidth().padding(all = 16.dp).height(56.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp)
+                        .height(56.dp),
                     enabled = stateData.value.name.value.isNotBlank()
-                            && !stateData.value.saving.value && !stateData.value.saved.value
+                            && !stateData.value.saving.value && !stateData.value.saved.value,
+                            colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFF0eF7729))
                 ) {
                     Text(text = when {
                         stateData.value.saving.value -> "Saving..."
                         stateData.value.saved.value -> "Saved"
                         else -> "Save Profile"
-                    }
+
+                    },
+                        color = Color.White
                     )
                 }
             }

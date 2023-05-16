@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.*
@@ -66,16 +67,17 @@ fun HomeLayout(
                         modifier = Modifier
                             .size(56.dp)
                             .background(
-                                color = if (homeViewModel.activeUser.value.id == it.id) MaterialTheme.colors.primary
+                                color = if (homeViewModel.activeUser.value.id == it.id) Color(0xFF0eF7729)
                                 else Color.Gray,
                                 shape = CircleShape
                             )
-                            .border(2.dp, color = Color.Cyan, shape = CircleShape),
+                            .border(2.dp, color = Color.DarkGray, shape = CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             textAlign = TextAlign.Center,
                             text = (it.name ?: "U").first().toString().uppercase(Locale.ENGLISH),
+
                             style = Typography.h6.copy(
                                 color = Color.White,
                                 fontFamily = FontFamily.SansSerif
@@ -85,7 +87,7 @@ fun HomeLayout(
                     Text(
                         text = (it.name?.replaceFirstChar { it.uppercase() } ?: "Unknown"),
                         style = Typography.caption.copy(
-                            color = if (homeViewModel.activeUser.value.id == it.id) MaterialTheme.colors.primary else Color.Gray,
+                            color = if (homeViewModel.activeUser.value.id == it.id) Color.Black else Color.Gray,
                             fontFamily = FontFamily.SansSerif
                         )
                     )
@@ -111,7 +113,7 @@ fun HomeLayout(
                         modifier = Modifier.align(Alignment.CenterVertically),
                         text = "Profile",
                         style = Typography.caption.copy(
-                            color = MaterialTheme.colors.primary,
+                            color = Color(0xFF0eF7729),
                             fontFamily = FontFamily.SansSerif
                         )
                     )
@@ -125,7 +127,7 @@ fun HomeLayout(
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "",
-                            tint = MaterialTheme.colors.primary
+                            tint = Color(0xFF0eF7729)
                         )
                     }
                 }
@@ -169,11 +171,13 @@ fun HomeLayout(
 
                 Divider(modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .background(MaterialTheme.colors.primaryVariant))
+                    .background(Color.Black))
 
                 Button(
                     modifier = Modifier
                         .padding(2.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFF0eF7729)),
                     onClick = { launchPersonalityTest() }
                 ) {
                     Text(
@@ -211,7 +215,7 @@ fun HomeLayout(
                         },
                     text = "Preferred Careers",
                     style = Typography.caption.copy(
-                        color = MaterialTheme.colors.primary,
+                        color = Color(0xFF0eF7729),
                         fontFamily = FontFamily.SansSerif
                     ),
                     textDecoration = TextDecoration.Underline
@@ -225,11 +229,14 @@ fun HomeLayout(
 
                 Divider(modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .background(color = MaterialTheme.colors.primary))
+                    .background(Color.Black))
 
                 Button(onClick = { launchCareerFinder() },
                     modifier = Modifier
-                        .padding(bottom = 2.dp)) {
+                        .padding(bottom = 2.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFF0eF7729))
+                ) {
                     Text(
                         textAlign = TextAlign.Center,
                         text = "Identify Suitable Career",
@@ -258,7 +265,7 @@ fun HomeLayout(
                         modifier = Modifier.padding(vertical = 8.dp),
                         text = "Subjects To Focus On",
                         style = Typography.caption.copy(
-                            color = MaterialTheme.colors.primary,
+                            color = Color.Black,
                             fontFamily = FontFamily.SansSerif
                         )
                     )
@@ -279,7 +286,6 @@ fun HomeLayout(
                     modifier = Modifier.padding(vertical = 8.dp),
                     text = "Programs To Study",
                     style = Typography.caption.copy(
-                        color = MaterialTheme.colors.primary,
                         fontFamily = FontFamily.SansSerif
                     )
                 )
@@ -293,7 +299,7 @@ fun HomeLayout(
                             .clickable { isExpanded = !isExpanded },
                         text = "Colleges",
                         style = Typography.caption.copy(
-                            color = MaterialTheme.colors.primary,
+                            color = Color(0xFF0eF7729),
                             fontFamily = FontFamily.SansSerif
                         ),
                         textDecoration = TextDecoration.Underline

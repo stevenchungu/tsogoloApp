@@ -22,9 +22,10 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/ic_baseline_person_add_24"
+        app:srcCompat="@drawable/baseline_person_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/add_profile" />
+        android:contentDescription="@string/add_profile"
+        app:backgroundTint="@color/nche"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

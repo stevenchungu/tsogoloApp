@@ -10,11 +10,13 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tsogolo.MainActivity
+import com.example.tsogolo.R
 import com.example.tsogolo.databinding.FragmentHomeBinding
 import com.example.tsogolo.ui.career.CareerFinderActivity
 import com.example.tsogolo.ui.personality.PersonalityTestActivity
 import com.example.tsogolo.ui.profile.ProfilingActivity
 import com.example.tsogolo.ui.theme.TsogoloTheme
+import com.google.android.material.navigation.NavigationView
 
 class HomeFragment : Fragment() {
 

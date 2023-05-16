@@ -20,7 +20,7 @@ class ProfilingViewModel : ViewModel() {
     val years = 1950 until GregorianCalendar().get(GregorianCalendar.YEAR)
     val months = 1..12
     val days = 1..31
-    val eduLevels = arrayOf(User.MSCE, User.JCE, User.PLSCE)
+    val eduLevels = arrayOf(User.MSCE, User.JCE)
 
     var profileData: MutableState<ProfileData> = mutableStateOf(
         ProfileData(
@@ -49,6 +49,7 @@ class ProfilingViewModel : ViewModel() {
 
             this.profileData.setValue(this, this::profileData, profileData)
             Log.d("PROFILING", "UserId1: $uid")
+
 
             if (uid != null) {
                 user = db.userDao().getById(uid)

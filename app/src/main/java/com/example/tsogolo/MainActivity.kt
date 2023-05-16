@@ -84,13 +84,13 @@ class MainActivity : AppCompatActivity() {
                     AlertDialog.Builder(this)
                         .setMessage(R.string.exit_warning)
                         .setPositiveButton("YES") {_,_ ->
-                            openFirstLaunchActivity()
+                            finishAndRemoveTask()
                         }.setNegativeButton("NO", null)
                         .create().show()
                     true
-                }else -> {
-//                    navController.navigate(it.itemId)
-                    false
+                } else -> {
+                    navController.navigate(it.itemId)
+                    true
                 }
             }
         }
