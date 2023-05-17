@@ -58,6 +58,14 @@ class FirstLaunchActivity : ComponentActivity() {
                             textAlign = TextAlign.Center
                         )
                     }
+                    
+                    Box(modifier = Modifier
+                        .align(Alignment.CenterHorizontally)){
+                            Text(text = "Discover Your Path")
+                        }
+                    
+                    
+                    
 
                     Divider(
                         Modifier
@@ -73,14 +81,15 @@ class FirstLaunchActivity : ComponentActivity() {
                            Button(onClick = { openProfilingActivity() },
                                modifier = Modifier
                                    .width(200.dp)
-                                   .padding(all = 16.dp)
+                                   .padding(all = 5.dp)
                                    .height(48.dp),
                                colors = ButtonDefaults.buttonColors(
                                    backgroundColor = Color(0xFF0eF7729),
                                ),
                            ) {
                                Text(text = "Career Guide",
-                                   color = Color.White
+                                   color = Color.White,
+                                   modifier = Modifier.wrapContentWidth()
                                )
                            }
 
@@ -95,13 +104,15 @@ class FirstLaunchActivity : ComponentActivity() {
                                onClick = { /* Handle the click action */ },
                                modifier = Modifier
                                    .weight(1f)
-                                   .padding(all = 16.dp)
-                                   .height(48.dp),
+                                   .padding(all = 5.dp)
+                                   .height(48.dp)
+                                   .fillMaxWidth(),
                                colors = ButtonDefaults.buttonColors(
                                    backgroundColor = Color(0xFF0eF7729))
                            ) {
                                Text(text = "Explore Career",
-                                   color = Color.White
+                                   color = Color.White,
+                                   modifier = Modifier.wrapContentWidth()
                                )
                            }
 
@@ -109,13 +120,15 @@ class FirstLaunchActivity : ComponentActivity() {
                                onClick = { /* Handle the click action */ },
                                modifier = Modifier
                                    .weight(1f)
-                                   .padding(all = 16.dp)
-                                   .height(48.dp),
+                                   .padding(all = 5.dp)
+                                   .height(48.dp)
+                                   .fillMaxWidth(),
                                colors = ButtonDefaults.buttonColors(
                                    backgroundColor = Color(0xFF0eF7729))
                            ) {
                                Text(text = "Job Search",
-                                   color = Color.White
+                                   color = Color.White,
+                                   modifier = Modifier.wrapContentWidth()
                                )
                            }
 
