@@ -45,10 +45,9 @@ fun CareerFinderLayout(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back Arrow",
                 Modifier.clickable { backArrowClicked() },
-                tint = MaterialTheme.colors.primary
             )},
             backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.primary
+
         )
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -56,7 +55,6 @@ fun CareerFinderLayout(
                 Text(
                     text = "Selected Careers",
                     style = Typography.caption.copy(
-                        color = MaterialTheme.colors.primary,
                         fontFamily = FontFamily.SansSerif
                     )
                 )
@@ -110,11 +108,9 @@ fun CareerFinderLayout(
                         painter = painterResource(id = R.drawable.ic_baseline_filter_list_24),
                         contentDescription = "",
                         modifier = Modifier.fillMaxWidth(),
-                        tint = MaterialTheme.colors.primary
                     )
                 }), modifier = Modifier.padding(4.dp),
                     style = Typography.caption.copy(
-                        color = MaterialTheme.colors.primary,
                         fontFamily = FontFamily.SansSerif
                     )
                 )
@@ -132,7 +128,7 @@ fun CareerFinderLayout(
                         selected = careerFinderViewModel.filterByGrades.value,
                         onClick = { careerFinderViewModel.filterByGradesClicked() },
                         colors = ChipDefaults.filterChipColors(
-                            selectedBackgroundColor = MaterialTheme.colors.primary
+                            selectedBackgroundColor = Color(0xFF0eF7729)
                         )
                     ) {
                         Text(text = "Grades Match")
@@ -144,10 +140,11 @@ fun CareerFinderLayout(
                         selected = careerFinderViewModel.filterByPersonality.value,
                         onClick = { careerFinderViewModel.filterByPersonalityClicked() },
                         colors = ChipDefaults.filterChipColors(
-                            selectedBackgroundColor = MaterialTheme.colors.primary
+                            selectedBackgroundColor = Color(0xFF0eF7729)
                         )
                     ) {
-                        Text(text = "Personality Match")
+                        Text(text = "Personality Match"
+                            )
                     }
                 }
             }
@@ -160,7 +157,7 @@ fun CareerFinderLayout(
                     modifier = Modifier.padding(vertical = 8.dp),
                     text = "Choose Careers",
                     style = Typography.caption.copy(
-                        color = MaterialTheme.colors.primary,
+
                         fontFamily = FontFamily.SansSerif
                     )
                 )
@@ -182,6 +179,8 @@ fun CareerFinderLayout(
                     .height(56.dp),
                 enabled = careerFinderViewModel.selectedCareers.value.isNotEmpty()
                             && !careerFinderViewModel.saving.value && !careerFinderViewModel.saved.value,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF0eF7729)),
                 onClick = {
                     careerFinderViewModel.careersSubmitted()
                 }
@@ -190,7 +189,8 @@ fun CareerFinderLayout(
                     careerFinderViewModel.saving.value -> "Submitting..."
                     careerFinderViewModel.saved.value -> "Submitted"
                     else -> "Submit Careers"
-                }
+                },
+                    color = Color.White
                 )
             }
         }

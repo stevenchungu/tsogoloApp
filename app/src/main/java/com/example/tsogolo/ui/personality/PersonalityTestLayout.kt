@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,92 +26,107 @@ fun PersonalityTestLayout(
     backArrowClicked: () -> Unit
 ) {
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())
-        .background(color = MaterialTheme.colors.background).fillMaxSize()) {
-        TopAppBar(title = { Text("Personality Test") }, navigationIcon = { Icon(
-            imageVector = Icons.Default.ArrowBack,
-            contentDescription = "Back Arrow",
-            Modifier.clickable { backArrowClicked() },
-            tint = MaterialTheme.colors.primary
-        )},
-            backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.primary)
-
-        Box(modifier = Modifier.padding(all = 16.dp)) {
-            Text(
-                text = "Submit button will be enabled when all the questions have been answered.\n\nAnswer Honestly!",
-                style = Typography.caption.copy(
-                    color = MaterialTheme.colors.primary,
-                    fontFamily = FontFamily.SansSerif
-                )
-            )
-        }
-
-        Divider(Modifier.padding(bottom = 12.dp))
-
-        Text(
-            text = personalityTestViewModel.question.value.question,
-            style = Typography.body1.copy(color = MaterialTheme.colors.onSurface, fontWeight = FontWeight.SemiBold),
-            modifier = Modifier.padding(16.dp),
-            textAlign = TextAlign.Center
-        )
-
-        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = personalityTestViewModel.question.value.agreed.value,
-                    onClick = { personalityTestViewModel.questionResponded(true) })
-                Text(text = "Agree",
-                    modifier = Modifier.padding(start = 4.dp),
-                    textAlign = TextAlign.Center,
-                    style = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
-                )
-            }
-
-            Spacer(modifier = Modifier.width(64.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = personalityTestViewModel.question.value.denied.value,
-                    onClick = { personalityTestViewModel.questionResponded(false) })
-                Text(text = "Disagree",
-                    modifier = Modifier.padding(start = 4.dp),
-                    textAlign = TextAlign.Center,
-                    style = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
-                )
-            }
-        }
-
-        Divider(Modifier.padding(vertical = 16.dp))
-
-        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Icon(
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = MaterialTheme.colors.background)
+    ){
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())
+            .background(color = MaterialTheme.colors.background).fillMaxSize()) {
+            TopAppBar(title = { Text("Personality Test") }, navigationIcon = { Icon(
                 imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Previous",
-                modifier = Modifier
-                    .size(64.dp)
-                    .clickable { personalityTestViewModel.previousQuestion() },
-                tint = MaterialTheme.colors.onSurface
+                contentDescription = "Back Arrow",
+                Modifier.clickable { backArrowClicked() },
+
+                )},
+                backgroundColor = MaterialTheme.colors.background)
+
+            Box(modifier = Modifier.padding(all = 16.dp)) {
+                Text(
+                    text = "Submit button will be enabled when all the questions have been answered.\n\nAnswer Honestly!",
+                    style = Typography.caption.copy(
+                        fontFamily = FontFamily.SansSerif
+                    )
+                )
+            }
+
+            Divider(Modifier.padding(bottom = 12.dp))
+
+            Text(
+                text = personalityTestViewModel.question.value.question,
+                style = Typography.body1.copy(color = MaterialTheme.colors.onSurface, fontWeight = FontWeight.SemiBold),
+                modifier = Modifier.padding(16.dp),
+                textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.width(80.dp))
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = personalityTestViewModel.question.value.agreed.value,
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = Color(0xFF0eF7729)
+                        ),
+                        onClick = { personalityTestViewModel.questionResponded(true) })
+                    Text(text = "Agree",
+                        modifier = Modifier.padding(start = 4.dp),
+                        textAlign = TextAlign.Center,
+                        style = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
+                    )
+                }
 
-            Icon(
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = "Next",
+                Spacer(modifier = Modifier.width(64.dp))
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = personalityTestViewModel.question.value.denied.value,
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = Color(0xFF0eF7729)
+                        ),
+                        onClick = { personalityTestViewModel.questionResponded(false) })
+                    Text(text = "Disagree",
+                        modifier = Modifier.padding(start = 4.dp),
+                        textAlign = TextAlign.Center,
+                        style = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
+                    )
+                }
+            }
+
+            Divider(Modifier.padding(vertical = 16.dp))
+
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Previous",
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clickable { personalityTestViewModel.previousQuestion() },
+                    tint = MaterialTheme.colors.onSurface
+                )
+
+                Spacer(modifier = Modifier.width(80.dp))
+
+                Icon(
+                    imageVector = Icons.Default.ArrowForward,
+                    contentDescription = "Next",
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clickable { personalityTestViewModel.nextQuestion() },
+                    tint = MaterialTheme.colors.onSurface
+                )
+            }
+
+            Button(onClick = { personalityTestViewModel.questionsSubmitted() },
                 modifier = Modifier
-                    .size(64.dp)
-                    .clickable { personalityTestViewModel.nextQuestion() },
-                tint = MaterialTheme.colors.onSurface
-            )
-        }
-
-        Button(onClick = { personalityTestViewModel.questionsSubmitted() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 32.dp)
-                .height(56.dp),
-            enabled = personalityTestViewModel.canSubmit.value
-        ) {
-            Text(text = "Submit")
+                    .fillMaxWidth()
+                    .padding(all = 32.dp)
+                    .height(56.dp),
+                enabled = personalityTestViewModel.canSubmit.value,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFF0eF7729)
+                )
+            ) {
+                Text(text = "Submit",
+                    color = Color.White
+                )
+            }
         }
     }
+
 }

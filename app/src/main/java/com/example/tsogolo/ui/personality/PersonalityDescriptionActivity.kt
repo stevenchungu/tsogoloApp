@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,59 +45,76 @@ class PersonalityDescriptionActivity : ComponentActivity() {
 
         setContent {
             TsogoloTheme(this.applicationContext) {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())
-                    .background(color = MaterialTheme.colors.background).fillMaxSize()) {
-                    TopAppBar(title = { Text("Personality Overview") }, navigationIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back Arrow",
-                            Modifier.clickable { finish() },
-                            tint = MaterialTheme.colors.primary
-                        )
-                    },
-                        backgroundColor = MaterialTheme.colors.background,
-                        contentColor = MaterialTheme.colors.primary
-                    )
 
-                    Column(modifier = Modifier.padding(all = 16.dp).align(Alignment.CenterHorizontally)) {
-                        Text(
-                            text = "${personality.value.type}",
-                            style = Typography.h4.copy(
-                                color = MaterialTheme.colors.primary,
-                                fontFamily = FontFamily.SansSerif
-                            ),
-                            textAlign = TextAlign.Center
-                        )
-                        Text(
-                            text = "Your secondary personality is ${personality2.value.type}",
-                            style = Typography.caption.copy(
-                                color = MaterialTheme.colors.primary,
-                                fontFamily = FontFamily.SansSerif
-                            ),
-                            textAlign = TextAlign.Center
-                        )
-                    }
+              Box(modifier = Modifier
+                  .fillMaxSize()
+                  .background(color = MaterialTheme.colors.background)
+              ){
+                  Column(modifier = Modifier
+                      .verticalScroll(rememberScrollState())
+                      .background(color = MaterialTheme.colors.background)
+                      .fillMaxSize()) {
+                      TopAppBar(title = { Text("Personality Overview") }, navigationIcon = {
+                          Icon(
+                              imageVector = Icons.Default.ArrowBack,
+                              contentDescription = "Back Arrow",
+                              Modifier.clickable { finish() },
 
-                    Divider(Modifier.padding(bottom = 16.dp))
+                              )
+                      },
+                          backgroundColor = MaterialTheme.colors.background,
 
-                    Text(
-                        text = "${personality.value.description}",
-                        style = Typography.body2.copy(
-                            color = MaterialTheme.colors.onSurface,
+                          )
 
-                        ),
-                        modifier = Modifier.padding(16.dp),
-                        textAlign = TextAlign.Center
-                    )
+                      Column(modifier = Modifier
+                          .padding(all = 16.dp)
+                          .align(Alignment.CenterHorizontally)) {
+                          Text(
+                              text = "${personality.value.type}",
+                              style = Typography.h4.copy(
+                                  fontFamily = FontFamily.SansSerif
+                              ),
+                              textAlign = TextAlign.Center
+                          )
+                          Text(
+                              text = "Your secondary personality is ${personality2.value.type}",
+                              style = Typography.caption.copy(
+                                  fontFamily = FontFamily.SansSerif
+                              ),
+                              textAlign = TextAlign.Center
+                          )
+                      }
 
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Button(onClick = { finish() },
-                        modifier = Modifier.fillMaxWidth().padding(all = 16.dp).height(48.dp),
-                    ) {
-                        Text(text = "DONE")
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+                      Divider(Modifier.padding(bottom = 16.dp))
+
+                      Text(
+                          text = "${personality.value.description}",
+                          style = Typography.body2.copy(
+                              color = MaterialTheme.colors.onSurface,
+
+                              ),
+                          modifier = Modifier.padding(16.dp),
+                          textAlign = TextAlign.Center
+                      )
+
+                      Spacer(modifier = Modifier.height(4.dp))
+                      Button(onClick = { finish() },
+                          modifier = Modifier
+                              .fillMaxWidth()
+                              .padding(all = 16.dp)
+                              .height(48.dp),
+                          colors = ButtonDefaults.buttonColors(
+                              backgroundColor = Color(0xFF0eF7729)),
+
+                          ) {
+                          Text(text = "DONE",
+                              color = Color.White
+                          )
+                      }
+                      Spacer(modifier = Modifier.height(16.dp))
+                  }
+              }
+
             }
         }
     }

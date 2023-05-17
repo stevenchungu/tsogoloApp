@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
                         .create().show()
                     true
                 } else -> {
-                    navController.navigate(it.itemId)
-                    true
+//                    navController.navigate(it.itemId)
+                    false
                 }
             }
         }

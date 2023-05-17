@@ -16,22 +16,22 @@
             android:theme="@style/Theme.Tsogolo" />
         <activity
             android:name=".ui.personality.PersonalityDescriptionActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_personality_description"
             android:theme="@style/Theme.Tsogolo" />
         <activity
             android:name=".ui.career.CareerGuideActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_career_guide"
             android:theme="@style/Theme.Tsogolo" />
         <activity
             android:name=".ui.personality.PersonalityTestActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_personality_test"
             android:theme="@style/Theme.Tsogolo" />
         <activity
             android:name=".ui.career.CareerFinderActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_career_finder"
             android:theme="@style/Theme.Tsogolo" />
         <activity

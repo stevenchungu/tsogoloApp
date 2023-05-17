@@ -32,24 +32,28 @@ fun CareerGuideLayout(
     careerGuideViewModel: CareerGuideViewModel = viewModel(),
     backArrowClicked: () -> Unit
 ) {
+Box(modifier = Modifier
+    .fillMaxSize()
+    .background(color = MaterialTheme.colors.background)
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())
-        .background(color = MaterialTheme.colors.background).fillMaxSize()) {
+){
+    Column(modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .background(color = MaterialTheme.colors.background)
+        .fillMaxSize()) {
         TopAppBar(title = { Text("Career Guide") }, navigationIcon = { Icon(
             imageVector = Icons.Default.ArrowBack,
             contentDescription = "Back Arrow",
             Modifier.clickable { backArrowClicked() },
-            tint = MaterialTheme.colors.primary
+
         )
         },
-            backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.primary)
+            backgroundColor = MaterialTheme.colors.background)
 
         Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
             Text(
                 text = "Preferred Careers",
                 style = Typography.caption.copy(
-                    color = MaterialTheme.colors.primary,
                     fontFamily = FontFamily.SansSerif
                 )
             )
@@ -86,7 +90,6 @@ fun CareerGuideLayout(
                         modifier = Modifier.padding(vertical = 8.dp),
                         text = "Subjects To Focus On",
                         style = Typography.subtitle2.copy(
-                            color = MaterialTheme.colors.primary,
                             fontFamily = FontFamily.SansSerif
                         )
                     )
@@ -107,7 +110,6 @@ fun CareerGuideLayout(
                     modifier = Modifier.padding(vertical = 8.dp),
                     text = "Programs To Study",
                     style = Typography.subtitle2.copy(
-                        color = MaterialTheme.colors.primary,
                         fontFamily = FontFamily.SansSerif
                     )
                 )
@@ -121,7 +123,7 @@ fun CareerGuideLayout(
                             .clickable { isExpanded = !isExpanded },
                         text = "Colleges",
                         style = Typography.caption.copy(
-                            color = MaterialTheme.colors.primary,
+                            color = Color(0xFF0eF7729),
                             fontFamily = FontFamily.SansSerif
                         ),
                         textDecoration = TextDecoration.Underline
@@ -141,10 +143,18 @@ fun CareerGuideLayout(
 
         Spacer(modifier = Modifier.height(4.dp))
         Button(onClick = { backArrowClicked() },
-            modifier = Modifier.fillMaxWidth().padding(all = 16.dp).height(48.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 16.dp)
+                .height(48.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFF0eF7729))
         ) {
-            Text(text = "DONE")
+            Text(text = "DONE",
+            color = Color.White
+                )
         }
         Spacer(modifier = Modifier.height(16.dp))
     }
+}
 }
