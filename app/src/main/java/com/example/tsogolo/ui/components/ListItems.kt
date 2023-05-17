@@ -2,6 +2,8 @@ package com.example.tsogolo.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.Checkbox
@@ -20,10 +22,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
-import com.example.tsogolo.model.Career
-import com.example.tsogolo.model.College
-import com.example.tsogolo.model.Program
-import com.example.tsogolo.model.Subject
+import com.example.tsogolo.model.*
 import com.example.tsogolo.ui.career.CareerData
 import com.example.tsogolo.ui.theme.Typography
 import com.example.tsogolo.util.Functions.getMoneyStringShort
@@ -50,6 +49,14 @@ fun CareerItem(career: Career) {
             )
         )
     }
+}
+
+@Composable
+fun CareerCategoryList(careerCategories: Category) {
+    Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
+        Text(text = "Category ID: ${careerCategories.id}, Category Name: ${careerCategories.categoryName}")
+    }
+
 }
 
 @Composable

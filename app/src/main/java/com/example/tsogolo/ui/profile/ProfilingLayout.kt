@@ -71,53 +71,6 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                 )
                 Divider(modifier = Modifier.padding(top = 16.dp))
 
-                Text(text = "Date of Birth: (Year/Month/Day)",
-                    modifier = Modifier
-                        .padding(bottom = 8.dp, top = 16.dp),
-                    style = Typography.body2.copy(color = MaterialTheme.colors.onSurface)
-                )
-                Row(modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)) {
-                    NumberPicker(
-                        state = stateData.value.year,
-                        range = viewModel.years,
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .align(Alignment.CenterVertically),
-                        text = "/",
-                        style = TextStyle(
-                            fontSize = TextUnit(28f, TextUnitType.Sp),
-                            color = Color.Gray,
-                            fontWeight = FontWeight.Light,
-                        )
-                    )
-                    NumberPicker(
-                        state = stateData.value.month,
-                        range = viewModel.months,
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .align(Alignment.CenterVertically),
-                        text = "/",
-                        style = TextStyle(
-                            fontSize = TextUnit(28f, TextUnitType.Sp),
-                            color = Color.Gray,
-                            fontWeight = FontWeight.Light
-                        )
-                    )
-                    NumberPicker(
-                        state = stateData.value.day,
-                        range = viewModel.days,
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
-                    )
-                }
 
                 Divider(modifier = Modifier.padding(top = 16.dp))
 

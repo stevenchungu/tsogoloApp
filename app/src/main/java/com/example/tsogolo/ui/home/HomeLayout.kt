@@ -140,7 +140,6 @@ fun HomeLayout(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                ProfileEntry(key = "Date of Birth", value = DateFormat.format("dd MMM, yyyy", user.dob ?: Date()).toString())
 
                 Spacer(modifier = Modifier.height(4.dp))
 

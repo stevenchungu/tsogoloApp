@@ -14,7 +14,6 @@ class User(
     companion object EduLevel {
         const val PLSCE = "PLSCE"
         const val MSCE = "MSCE"
-        const val JCE = "JCE"
     }
 
     /**
