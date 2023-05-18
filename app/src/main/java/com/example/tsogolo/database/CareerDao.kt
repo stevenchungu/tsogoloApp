@@ -2,6 +2,7 @@ package com.example.tsogolo.database
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.tsogolo.model.Career
 
 @Dao
@@ -26,5 +27,13 @@ interface CareerDao {
             "JOIN PersonalitySuitableCareer ON Career.id = PersonalitySuitableCareer.careerId " +
             "JOIN Personality ON PersonalitySuitableCareer.personalityId = Personality.id")
     suspend fun careerPersonalities(): Map<Career, List<PersonalityAlt>>
+
+//    @Transaction
+//    @Query("SELECT Career.* FROM Career " +
+//            "JOIN CareerCategory ON Career.id = CareerCategory.careerID " +
+//            "WHERE CareerCategory.categoryID = :categoryId")
+//    suspend fun getCareersByCategory(categoryId: Int): List<Career>
+
+
 
 }

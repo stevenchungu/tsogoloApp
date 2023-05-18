@@ -221,8 +221,8 @@ class FirstLaunchActivity : ComponentActivity() {
 
     fun openProfilingActivity() {
         val intent = Intent(this, ProfilingActivity::class.java)
-//        resultLauncher.launch(intent)
-        startActivity(intent)
+        resultLauncher.launch(intent)
+//        startActivity(intent)
     }
     fun openExploreActivity() {
         val intent = Intent(this, ExploreActivity::class.java)
