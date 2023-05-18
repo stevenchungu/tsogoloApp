@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 1,
+    "version": 2,
     "identityHash": "8ff9ac747c8387a071f7d80cbebbf9fb",
     "entities": [
       {
@@ -654,17 +654,17 @@
       },
       {
         "tableName": "CareerCategory",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryID` INTEGER NOT NULL, `careerID` INTEGER NOT NULL, PRIMARY KEY(`careerID`, `categoryID`), FOREIGN KEY(`careerID`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`categoryID`) REFERENCES `Category`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`careerID` INTEGER NOT NULL, `categoryID` INTEGER NOT NULL, PRIMARY KEY(`careerID`, `categoryID`), FOREIGN KEY(`careerID`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`categoryID`) REFERENCES `Category`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
-            "fieldPath": "categoryID",
-            "columnName": "categoryID",
+            "fieldPath": "careerID",
+            "columnName": "careerID",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "careerID",
-            "columnName": "careerID",
+            "fieldPath": "categoryID",
+            "columnName": "categoryID",
             "affinity": "INTEGER",
             "notNull": true
           }
