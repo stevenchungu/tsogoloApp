@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8ff9ac747c8387a071f7d80cbebbf9fb",
+    "identityHash": "e4c26be0de5db39de34c243e12bc10c0",
     "entities": [
       {
         "tableName": "Career",
@@ -651,62 +651,12 @@
             ]
           }
         ]
-      },
-      {
-        "tableName": "CareerCategory",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryID` INTEGER NOT NULL, `careerID` INTEGER NOT NULL, PRIMARY KEY(`careerID`, `categoryID`), FOREIGN KEY(`careerID`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`categoryID`) REFERENCES `Category`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "categoryID",
-            "columnName": "categoryID",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "careerID",
-            "columnName": "careerID",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "careerID",
-            "categoryID"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": [
-          {
-            "table": "Career",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "careerID"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          },
-          {
-            "table": "Category",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "categoryID"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8ff9ac747c8387a071f7d80cbebbf9fb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e4c26be0de5db39de34c243e12bc10c0')"
     ]
   }
 }
