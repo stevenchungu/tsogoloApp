@@ -12,6 +12,7 @@ import com.example.tsogolo.model.UserPersonality
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import java.util.Spliterator.OfInt
 
 class PersonalityTestViewModel : ViewModel() {
 
@@ -24,6 +25,14 @@ class PersonalityTestViewModel : ViewModel() {
     private var index = 0
     private var personalities = listOf<Personality>()
     var onSubmitted: () -> Unit = {}
+
+    //progress bar variables
+    var progressValue: MutableState<Float> = mutableStateOf(0f)
+    private var answeredQuestionCount = 0
+    val totalQuestions: Int = 20
+
+    val answeredQuestions: MutableState<Int> = mutableStateOf(0)
+
 
     fun initialize(context: Context, userId: Int, onSubmitted: () -> Unit) {
         this.onSubmitted = onSubmitted
@@ -47,6 +56,11 @@ class PersonalityTestViewModel : ViewModel() {
     }
 
     fun questionsSubmitted() {
+        // Progress calculations
+
+        val progress = answeredQuestionCount.toFloat() / totalQuestions.toFloat()
+        progressValue.value = progress
+
         val (I, cI) = countChar('I')
         val (N, cN) = countChar('N')
         val (T, cT) = countChar('T')
@@ -118,32 +132,49 @@ class PersonalityTestViewModel : ViewModel() {
     }
 
     fun nextQuestion() {
-        if (index == questions.lastIndex)
-            index = 0
-        else index++
+        if (index == questions.lastIndex){
+            return
+        }
+        index++
         setQuestion()
     }
 
     fun previousQuestion() {
-        if (index == 0)
-            index = questions.lastIndex
-        else index--
+
+        if (index == 0){
+            return
+        }
+        index--
         setQuestion()
+
     }
 
     fun questionResponded(response: Boolean) {
-        if (response) {
-            questions[index].agreed.value = true
-            questions[index].denied.value = false
-        } else {
-            questions[index].agreed.value = false
-            questions[index].denied.value = true
+        // Only increment answered question count if a radio button is clicked
+        if (!question.value.agreed.value && !question.value.denied.value) {
+            // Increment answered question count
+            answeredQuestionCount++
+
+            // Progress calculations
+            val progress = answeredQuestionCount.toFloat() / totalQuestions.toFloat()
+            progressValue.value = progress
         }
+
+
+        if (response) {
+            question.value.agreed.value = true
+            question.value.denied.value = false
+        } else {
+            question.value.agreed.value = false
+            question.value.denied.value = true
+        }
+
         setQuestion()
         canSubmit.value = questions.all {
             it.agreed.value || it.denied.value
         }
     }
+
 
     private fun setQuestion() {
         if (questions.isNotEmpty()) {

@@ -13,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tsogolo.ui.theme.Typography
 
@@ -30,15 +32,44 @@ fun PersonalityTestLayout(
         .fillMaxSize()
         .background(color = MaterialTheme.colors.background)
     ){
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())
-            .background(color = MaterialTheme.colors.background).fillMaxSize()) {
-            TopAppBar(title = { Text("Personality Test") }, navigationIcon = { Icon(
+        Column(modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .background(color = MaterialTheme.colors.background)
+            .fillMaxSize()) {
+            TopAppBar(
+                title = { Text("Personality Test") },
+                navigationIcon = { Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back Arrow",
                 Modifier.clickable { backArrowClicked() },
 
                 )},
-                backgroundColor = MaterialTheme.colors.background)
+                backgroundColor = MaterialTheme.colors.background,
+
+                actions = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(16.dp)
+                    ){
+                        Box(
+                            contentAlignment = Alignment.Center
+
+                        ) {
+
+                            CircularProgressIndicator(
+                                progress = personalityTestViewModel.progressValue.value,
+                                modifier = Modifier.size(40.dp)
+                            )
+                            Text(
+                                text = "${(personalityTestViewModel.progressValue.value * 100).toInt()}%",
+                                style = TextStyle(fontSize = 10.sp),
+                                modifier = Modifier.padding(4.dp)
+                            )
+                        }
+                    }
+                }
+
+            )
 
             Box(modifier = Modifier.padding(all = 16.dp)) {
                 Text(
@@ -60,11 +91,13 @@ fun PersonalityTestLayout(
 
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(selected = personalityTestViewModel.question.value.agreed.value,
+                    RadioButton(
+                        selected = personalityTestViewModel.question.value.agreed.value,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = Color(0xFF0eF7729)
                         ),
-                        onClick = { personalityTestViewModel.questionResponded(true) })
+                        onClick = { personalityTestViewModel.questionResponded(true) }
+                    )
                     Text(text = "Agree",
                         modifier = Modifier.padding(start = 4.dp),
                         textAlign = TextAlign.Center,
@@ -75,11 +108,14 @@ fun PersonalityTestLayout(
                 Spacer(modifier = Modifier.width(64.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(selected = personalityTestViewModel.question.value.denied.value,
+                    RadioButton(
+                        selected = personalityTestViewModel.question.value.denied.value,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = Color(0xFF0eF7729)
                         ),
-                        onClick = { personalityTestViewModel.questionResponded(false) })
+                        onClick = { personalityTestViewModel.questionResponded(false) }
+                    )
+
                     Text(text = "Disagree",
                         modifier = Modifier.padding(start = 4.dp),
                         textAlign = TextAlign.Center,
@@ -96,8 +132,8 @@ fun PersonalityTestLayout(
                     contentDescription = "Previous",
                     modifier = Modifier
                         .size(64.dp)
-                        .clickable { personalityTestViewModel.previousQuestion() },
-                    tint = MaterialTheme.colors.onSurface
+                        .clickable{  personalityTestViewModel.previousQuestion()},
+                            tint = MaterialTheme.colors.onSurface
                 )
 
                 Spacer(modifier = Modifier.width(80.dp))
