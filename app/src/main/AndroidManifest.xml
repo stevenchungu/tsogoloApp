@@ -15,11 +15,6 @@
             android:label="@string/title_activity_first_launch"
             android:theme="@style/Theme.Tsogolo" />
         <activity
-            android:name=".ui.explore.ExploreActivity"
-            android:exported="false"
-            android:label="Explore"
-            android:theme="@style/Theme.Tsogolo" />
-        <activity
             android:name=".ui.personality.PersonalityDescriptionActivity"
             android:exported="true"
             android:label="@string/title_activity_personality_description"
