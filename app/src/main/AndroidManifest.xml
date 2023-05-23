@@ -10,6 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tsogolo">
         <activity
+            android:name=".ui.jobs.JobDetailsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_job_details"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.jobs.JobsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_jobs"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
             android:name=".ui.FirstLaunchActivity"
             android:exported="false"
             android:label="@string/title_activity_first_launch"
