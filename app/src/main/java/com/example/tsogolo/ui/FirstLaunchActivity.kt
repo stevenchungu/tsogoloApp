@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import com.example.tsogolo.R
+import com.example.tsogolo.ui.jobs.JobsActivity
 import com.example.tsogolo.ui.profile.ProfilingActivity
 import com.example.tsogolo.ui.theme.TsogoloTheme
 import com.example.tsogolo.ui.theme.Typography
@@ -117,7 +118,9 @@ class FirstLaunchActivity : ComponentActivity() {
                            }
 
                            Button(
-                               onClick = { /* Handle the click action */ },
+                               onClick = {
+                                   this@FirstLaunchActivity.startActivity(Intent(this@FirstLaunchActivity, JobsActivity::class.java))
+                                         },
                                modifier = Modifier
                                    .weight(1f)
                                    .padding(all = 5.dp)

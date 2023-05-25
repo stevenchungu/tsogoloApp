@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.tsogolo"
         minSdk 22
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.1"
 
@@ -72,6 +72,12 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     implementation 'androidx.webkit:webkit:1.4.0'
+    implementation platform('androidx.compose:compose-bom:2022.10.00')
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.material3:material3'
+    implementation platform('androidx.compose:compose-bom:2022.10.00')
+    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
+    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
 
     def compose_version = "1.2.0-alpha08"
     implementation "androidx.compose.ui:ui:$compose_version"
@@ -92,6 +98,7 @@ dependencies {
     implementation "androidx.compose.compiler:compiler:$compose_version"
     // UI Tests
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
 
     def room_version = "2.4.2"
     implementation "androidx.room:room-runtime:$room_version"
