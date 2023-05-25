@@ -132,22 +132,28 @@ class PersonalityTestViewModel : ViewModel() {
     }
 
     fun nextQuestion() {
-        if (index == questions.lastIndex){
-            return
+        if (canGoForward()) {
+            index++
+            setQuestion()
         }
-        index++
-        setQuestion()
     }
 
     fun previousQuestion() {
-
-        if (index == 0){
-            return
+        if (canGoBack()) {
+            index--
+            setQuestion()
         }
-        index--
-        setQuestion()
-
     }
+
+    fun canGoBack(): Boolean {
+        return index > 0
+    }
+
+
+    fun canGoForward(): Boolean {
+        return index < questions.size - 1
+    }
+
 
     fun questionResponded(response: Boolean) {
         // Only increment answered question count if a radio button is clicked

@@ -19,20 +19,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ChipDefaults
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FilterChip
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -64,7 +54,7 @@ class JobsActivity : ComponentActivity() {
                         .fillMaxSize()
                 ) {
                     TopAppBar(
-                        title = { androidx.compose.material.Text("Job Search") },
+                        title = { androidx.compose.material.Text("Jobs") },
                         backgroundColor = androidx.compose.material.MaterialTheme.colors.background,
                         contentColor = Color.Black,
                         navigationIcon = {
@@ -93,7 +83,7 @@ class JobsActivity : ComponentActivity() {
                                         viewModel.toggleCategorySelection(viewModel.jobCategories[category])
                                     }
                                 ) {
-                                    Text(text = viewModel.jobCategories[category])
+                                  Text(text = viewModel.jobCategories[category])
                                 }
                                 Spacer(modifier = Modifier.size(8.dp))
                             }
@@ -140,14 +130,14 @@ fun JobItem(job: Job, activity: JobsActivity) {
         ) {
             Text(
                 text = job.title,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.subtitle2,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = job.company,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.body2,
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.secondary
+
             )
             CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Row(
@@ -155,17 +145,17 @@ fun JobItem(job: Job, activity: JobsActivity) {
                 ) {
                     Text(
                         text = job.location,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.body2,
                         fontSize = 12.sp
                     )
                     Text(
                         text = " • ",
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.body2,
                         fontSize = 12.sp
                     )
                     Text(
                         text = job.datePosted,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.body2,
                         fontSize = 12.sp
                     )
                 }

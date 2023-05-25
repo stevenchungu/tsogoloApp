@@ -21,4 +21,6 @@
     <string name="title_activity_first_launch">FirstLaunchActivity</string>
     <string name="dark_mode"><b>Dark Mode</b></string>
     <string name="light_mode">Light Mode</string>
+    <string name="title_activity_job_details" />
+    <string name="title_activity_jobs" />
 </resources>

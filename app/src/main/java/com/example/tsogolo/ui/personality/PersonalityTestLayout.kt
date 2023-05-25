@@ -127,25 +127,29 @@ fun PersonalityTestLayout(
             Divider(Modifier.padding(vertical = 16.dp))
 
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Previous",
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clickable{  personalityTestViewModel.previousQuestion()},
-                            tint = MaterialTheme.colors.onSurface
-                )
-
+                if (personalityTestViewModel.canGoBack()) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Previous",
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clickable { personalityTestViewModel.previousQuestion() },
+                        tint = MaterialTheme.colors.onSurface
+                    )
+                }
                 Spacer(modifier = Modifier.width(80.dp))
 
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = "Next",
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clickable { personalityTestViewModel.nextQuestion() },
-                    tint = MaterialTheme.colors.onSurface
-                )
+
+                if (personalityTestViewModel.canGoForward()) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = "Next",
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clickable { personalityTestViewModel.nextQuestion() },
+                        tint = MaterialTheme.colors.onSurface
+                    )
+                }
             }
 
             Button(onClick = { personalityTestViewModel.questionsSubmitted() },
