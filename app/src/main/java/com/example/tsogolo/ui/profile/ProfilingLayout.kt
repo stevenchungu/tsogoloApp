@@ -1,9 +1,11 @@
 package com.example.tsogolo.ui.profile
 
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -13,10 +15,13 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -113,16 +118,25 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                                     .align(Alignment.CenterVertically),
                                 color = MaterialTheme.colors.onSurface
                             )
-                            OutlinedTextField(value = it.second,
-                                onValueChange = {viewModel.onGradeChange(i, it)},
+                            val focusManager = LocalFocusManager.current
+                            OutlinedTextField(
+                                value = it.second,
+                                onValueChange = { viewModel.onGradeChange(i, it) },
                                 placeholder = { Text(text = "Points") },
                                 isError = !it.second.isDigitsOnly() && it.second.isNotEmpty(),
-                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done // Set the IME action to Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = { focusManager.clearFocus() } // Clear focus to hide the keyboard
+                                ),
                                 textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface),
                                 colors = TextFieldDefaults.outlinedTextFieldColors(
                                     focusedBorderColor = Color(0xFF0eF7729),
                                 )
                             )
+
                         }
                     }
                 }

@@ -25,6 +25,12 @@ class PersonalityTestViewModel : ViewModel() {
     private var personalities = listOf<Personality>()
     var onSubmitted: () -> Unit = {}
 
+    fun getTotalQuestions(): Int {
+        return questions.size
+    }
+    fun getAnsweredQuestions(): Int {
+        return questions.size
+    }
     fun initialize(context: Context, userId: Int, onSubmitted: () -> Unit) {
         this.onSubmitted = onSubmitted
         db = TsogoloDatabase.getInstance(context)

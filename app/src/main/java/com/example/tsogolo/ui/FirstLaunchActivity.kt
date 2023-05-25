@@ -34,7 +34,7 @@ class FirstLaunchActivity : ComponentActivity() {
             TsogoloTheme(this.applicationContext) {
 
                 Column(modifier = Modifier
-                    .padding(16.dp)
+                    //.padding(1.dp)
                     .fillMaxSize()
                     .background(color = MaterialTheme.colors.background)) {
                     Box(modifier = Modifier
