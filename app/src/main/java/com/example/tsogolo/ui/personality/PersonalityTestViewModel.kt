@@ -174,13 +174,11 @@ class PersonalityTestViewModel : ViewModel() {
             question.value.agreed.value = false
             question.value.denied.value = true
         }
-
         setQuestion()
         canSubmit.value = questions.all {
             it.agreed.value || it.denied.value
         }
     }
-
 
     private fun setQuestion() {
         if (questions.isNotEmpty()) {
