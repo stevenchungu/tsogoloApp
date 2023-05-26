@@ -9,10 +9,17 @@ import com.example.tsogolo.database.TsogoloDatabase
 import com.example.tsogolo.model.Personality
 import com.example.tsogolo.model.User
 import com.example.tsogolo.model.UserPersonality
+import com.example.tsogolo.ui.personality.ApiQuestionData.Companion.toJsonRequestBody
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import java.util.Spliterator.OfInt
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 class PersonalityTestViewModel : ViewModel() {
 
@@ -29,7 +36,7 @@ class PersonalityTestViewModel : ViewModel() {
     //progress bar variables
     var progressValue: MutableState<Float> = mutableStateOf(0f)
     private var answeredQuestionCount = 0
-    val totalQuestions: Int = 20
+    private val totalQuestions: Int = 20
 
     val answeredQuestions: MutableState<Int> = mutableStateOf(0)
 
@@ -56,6 +63,55 @@ class PersonalityTestViewModel : ViewModel() {
     }
 
     fun questionsSubmitted() {
+
+        val apiQuestions = questions.map {questionData ->
+            ApiQuestionData(
+                id = questionData.id,
+                question = questionData.question,
+                agreeType = questionData.agreedType.toString(),
+                denialType = questionData.denyType.toString()
+            )
+        }
+
+        val apiEndPoint = "http://localhost:3000/personality-questions"
+        val retrofit = Retrofit.Builder()
+           .baseUrl(apiEndPoint)
+           .addConverterFactory(GsonConverterFactory.create())
+           .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+        val requestBody = apiQuestions.toJsonRequestBody()
+
+        apiService.storePersonalityQuestions(requestBody).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                // Handle API request success
+                if(response.isSuccessful){
+                    val responseCode = response.code() // Get the response code
+                    val headers = response.headers() // Get the response headers
+
+                    // Log response code
+                    Log.d("API", "Response Code: $responseCode")
+
+                    // Log headers
+                    Log.d("API", "Headers:")
+                    headers.names().forEach { name ->
+                        Log.d("API", "$name: ${headers[name]}")
+                    }
+
+
+                }else{
+                    Log.e("API", "API request failed: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                // Handle API request failure
+                Log.e("Error", t.toString())
+            }
+        })
+
+
+
         // Progress calculations
 
         val progress = answeredQuestionCount.toFloat() / totalQuestions.toFloat()
@@ -195,3 +251,18 @@ data class QuestionData(
     var agreed: MutableState<Boolean> = mutableStateOf(false),
     var denied: MutableState<Boolean> = mutableStateOf(false),
 )
+
+data class ApiQuestionData(
+    val id: Int,
+    val question: String,
+    val agreeType: String,
+    val denialType: String
+) {
+    companion object {
+        fun List<ApiQuestionData>.toJsonRequestBody(): RequestBody {
+            val jsonString = Gson().toJson(this)
+            val mediaType = "application/json".toMediaType()
+            return jsonString.toRequestBody(mediaType)
+        }
+    }
+}
