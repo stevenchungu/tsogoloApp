@@ -51,6 +51,37 @@ fun CareerItem(career: Career) {
     }
 }
 
+@OptIn(ExperimentalUnitApi::class)
+@Composable
+fun SearchItem(career: CareerData, onClick: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    ) {
+        Text(
+            text = career.title,
+            style = Typography.subtitle2.copy(
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily.SansSerif,
+                color = MaterialTheme.colors.onSurface,
+                lineHeight = TextUnit(18f, TextUnitType.Sp)
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = career.description ?: "Unknown",
+            style = Typography.body2.copy(
+                fontWeight = FontWeight.Normal,
+                fontFamily = FontFamily.SansSerif,
+                color = MaterialTheme.colors.onSurface
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+    }
+}
+
 @Composable
 fun CareerCategoryList(careerCategories: Category) {
     Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {

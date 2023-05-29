@@ -27,6 +27,26 @@
             android:label="@string/title_activity_first_launch"
             android:theme="@style/Theme.Tsogolo" />
         <activity
+            android:name=".ui.career.CareerSearchActivity"
+            android:exported="false"
+            android:label="Search"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.explore.CategoryDetailsActivity"
+            android:exported="false"
+            android:label="career"
+            android:theme="@style/Theme.Tsogolo" />
+        <activity
+            android:name=".ui.explore.ExploreActivity"
+            android:exported="false"
+            android:label="explore"
+            android:theme="@style/Theme.Tsogolo" />
+<!--        <activity-->
+<!--            android:name=".ui.career.CareerDescriptionActivity"-->
+<!--            android:exported="false"-->
+<!--            android:label="Search"-->
+<!--            android:theme="@style/Theme.Tsogolo" />-->
+        <activity
             android:name=".ui.personality.PersonalityDescriptionActivity"
             android:exported="true"
             android:label="@string/title_activity_personality_description"

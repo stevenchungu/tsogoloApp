@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "8ff9ac747c8387a071f7d80cbebbf9fb",
+    "identityHash": "e00aae9eb60e726a9b1ef6388fa5775d",
     "entities": [
       {
         "tableName": "Career",
@@ -654,47 +654,47 @@
       },
       {
         "tableName": "CareerCategory",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`careerID` INTEGER NOT NULL, `categoryID` INTEGER NOT NULL, PRIMARY KEY(`careerID`, `categoryID`), FOREIGN KEY(`careerID`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`categoryID`) REFERENCES `Category`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryId` INTEGER NOT NULL, `careerId` INTEGER NOT NULL, PRIMARY KEY(`categoryId`, `careerId`), FOREIGN KEY(`categoryId`) REFERENCES `Category`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`careerId`) REFERENCES `Career`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
-            "fieldPath": "careerID",
-            "columnName": "careerID",
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "categoryID",
-            "columnName": "categoryID",
+            "fieldPath": "careerId",
+            "columnName": "careerId",
             "affinity": "INTEGER",
             "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "careerID",
-            "categoryID"
+            "categoryId",
+            "careerId"
           ],
           "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": [
           {
-            "table": "Career",
+            "table": "Category",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "careerID"
+              "categoryId"
             ],
             "referencedColumns": [
               "id"
             ]
           },
           {
-            "table": "Category",
+            "table": "Career",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "categoryID"
+              "careerId"
             ],
             "referencedColumns": [
               "id"
@@ -706,7 +706,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8ff9ac747c8387a071f7d80cbebbf9fb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e00aae9eb60e726a9b1ef6388fa5775d')"
     ]
   }
 }
