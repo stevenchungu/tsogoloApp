@@ -5,16 +5,16 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 
-data class CategoryWithCareer(
-    @Embedded val category: Category,
+data class CareerCategoryWithCareerAndCategory(
+    @Embedded val careerCategory: CareerCategory,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "id",
-        associateBy = Junction(
-            value = CareerCategory::class,
-            parentColumn = "categoryID",
-            entityColumn = "careerID"
-        )
+        parentColumn = "careerId",
+        entityColumn = "id"
     )
-    val careers: List<Career>
+    val career: List<Career>,
+    @Relation(
+        parentColumn = "categoryId",
+        entityColumn = "id"
+    )
+    val category: List<Category>
 )

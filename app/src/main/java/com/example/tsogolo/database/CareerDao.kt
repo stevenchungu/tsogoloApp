@@ -4,12 +4,20 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.tsogolo.model.Career
+//import com.example.tsogolo.model.CareerCategories
+import com.example.tsogolo.model.CareerCategory
+//import com.example.tsogolo.model.CareerCategory
+import com.example.tsogolo.model.Category
 
 @Dao
 interface CareerDao {
 
     @Query("SELECT * FROM Career ORDER BY title")
     suspend fun getAll(): List<Career>
+
+//    @Query("SELECT * FROM CareerCategory")
+//    suspend fun careerCategor(): List<CareerCategory>
+
 
     @Query("SELECT Career.*, " +
             "Program.id as pr_id, Program.name, Program.duration " +
@@ -29,10 +37,10 @@ interface CareerDao {
     suspend fun careerPersonalities(): Map<Career, List<PersonalityAlt>>
 
 //    @Transaction
-//    @Query("SELECT Career.* FROM Career " +
-//            "JOIN CareerCategory ON Career.id = CareerCategory.careerID " +
-//            "WHERE CareerCategory.categoryID = :categoryId")
-//    suspend fun getCareersByCategory(categoryId: Int): List<Career>
+    @Query("SELECT Career.* FROM Career " +
+            "JOIN CareerCategory ON Career.id = CareerCategory.careerID " +
+            "WHERE CareerCategory.categoryID = :categoryId")
+    suspend fun getCareersByCategory(categoryId: Int): List<Career>
 
 
 

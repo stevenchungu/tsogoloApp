@@ -6,28 +6,24 @@ import androidx.room.ForeignKey
 
 
 @Entity(
-    primaryKeys = ["careerID", "categoryID"],
+    primaryKeys = ["categoryId", "careerId"],
     foreignKeys = [
         ForeignKey(
             entity = Category::class,
             parentColumns = ["id"],
-            childColumns = ["categoryID"],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.NO_ACTION
+            childColumns = ["categoryId"],
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = Career::class,
             parentColumns = ["id"],
-            childColumns = ["careerID"],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.NO_ACTION
+            childColumns = ["careerId"],
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )
 class CareerCategory(
-    @ColumnInfo(name = "careerID") var careerID: Int,
-    @ColumnInfo(name = "categoryID") var categoryID: Int
-//    var careerID: Int,
-//    var categoryID: Int
+    var categoryId: Int,
+    var careerId: Int,
 )
 
