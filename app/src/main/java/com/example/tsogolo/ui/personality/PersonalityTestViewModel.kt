@@ -73,7 +73,7 @@ class PersonalityTestViewModel : ViewModel() {
             )
         }
 
-        val apiEndPoint = "http://localhost:3000/personality-questions"
+        val apiEndPoint = "http://localhost:3000/personality-questions/"
         val retrofit = Retrofit.Builder()
            .baseUrl(apiEndPoint)
            .addConverterFactory(GsonConverterFactory.create())
