@@ -14,7 +14,7 @@ import com.example.tsogolo.util.Converters
 @Database(entities = [Career::class, Category::class, College::class, CollegeProgram::class, Personality::class,
     PersonalityQuestion::class, PersonalitySuitableCareer::class, PreferredCareer::class,
     Program::class, ProgramCareer::class,  ProgramRequirement::class, Subject::class,
-    User::class, UserPersonality::class, UserSubject::class, CareerCategory::class], version = 1)
+    User::class, UserPersonality::class, UserSubject::class, CareerCategory::class], version = 2)
 @TypeConverters(Converters::class)
 abstract class TsogoloDatabase : RoomDatabase() {
 
@@ -70,7 +70,7 @@ abstract class TsogoloDatabase : RoomDatabase() {
 ////    }
 //}
 
-class Migration2To3 : Migration(2, 1) {
+class Migration2To3 : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
         Log.d("TsogoloDatabase", "migration instance")
 
