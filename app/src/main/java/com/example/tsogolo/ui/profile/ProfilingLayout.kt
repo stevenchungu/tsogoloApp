@@ -84,11 +84,19 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         focusedBorderColor = Color(0xFF0eF7729)
                     ),
-                    textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
+                    textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = if (stateData.value.name.value.isNotEmpty()) ImeAction.Done else ImeAction.Default
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (stateData.value.name.value.isNotEmpty()) {
+                                viewModel.saveProfile()
+                            }
+                        }
+                    )
                 )
-
-
-                Divider(modifier = Modifier.padding(top = 16.dp))
 
 
                 Divider(modifier = Modifier.padding(top = 16.dp))
@@ -186,13 +194,3 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
         }
     }
 }
-
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TsogoloTheme {
-        ProfilingLayout()
-    }
-}*/
