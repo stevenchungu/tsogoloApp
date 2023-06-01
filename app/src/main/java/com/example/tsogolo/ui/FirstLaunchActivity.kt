@@ -164,8 +164,8 @@ class FirstLaunchActivity : ComponentActivity() {
             setResult(RESULT_OK, result.data)
             finish()
         } else {
-            setResult(RESULT_CANCELED)
-            finish()
+            val intent = Intent(this, FirstLaunchActivity::class.java)
+            startActivity(intent)
         }
     }
 
