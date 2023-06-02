@@ -1,6 +1,7 @@
 package com.example.tsogolo.ui.career
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -97,9 +98,11 @@ fun CareerSearchLayout(
 
                     careers.forEach { careerData ->
                         SearchItem(career = careerData, onClick = {
-//                        careerFinderViewModel.careersSubmitted()
-//                        context.startActivity(Intent(context, CareerGuideActivity::class.java))
-                            // Navigate to the career details page
+                            Log.d("CategoryViewModel", "tione: ${careerData.id}")
+                            val intent = Intent(context, CareerDescriptionActivity::class.java).apply {
+                                putExtra("careerId", careerData.id)
+                            }
+                            context.startActivity(intent)
                         })
                         Divider()
                     }

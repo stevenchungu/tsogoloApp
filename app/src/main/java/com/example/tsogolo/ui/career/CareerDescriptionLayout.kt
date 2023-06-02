@@ -1,206 +1,212 @@
-package com.example.tsogolo.ui.career;
+package com.example.tsogolo.ui.explore
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.R
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable;
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextDirection.Companion.Content
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.room.util.TableInfo
+import com.example.tsogolo.database.ProgramAlt
+import com.example.tsogolo.database.TsogoloDatabase
+import com.example.tsogolo.model.Career
+import com.example.tsogolo.model.Category
+import com.example.tsogolo.model.College
+import com.example.tsogolo.model.Program
+import com.example.tsogolo.ui.career.CareerSearchActivity
 import com.example.tsogolo.ui.components.SearchItem
 import com.example.tsogolo.ui.theme.Typography
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
-import kotlin.OptIn;
-
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalUnitApi::class)
 @Composable
-fun CareerDescriptionLayout(
+fun careerDescription(
         careerDescriptionViewModel: CareerDescriptionViewModel = viewModel(),
+        careerId: Int,
         backArrowClicked: () -> Unit
-        ) {
-
+) {
         val context = LocalContext.current
 
-//        LaunchedEffect(Unit) {
-//                careerSearchViewModel.initialize(context)
-//        }
+        LaunchedEffect(Unit) {
+                careerDescriptionViewModel.initialize(context, careerId)
+        }
 
-        Column(modifier = Modifier.background(color = MaterialTheme.colors.background)
-                .fillMaxSize()) {
+        val career = careerDescriptionViewModel.career.value
+        val programs = careerDescriptionViewModel.program.value
+        val colleges = careerDescriptionViewModel.college.value
+
+        Column(modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()) {
                 TopAppBar(
-                        title = { Text("Search for Career") },
-                        navigationIcon = { Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Back Arrow",
-                                Modifier.clickable { backArrowClicked() },
-//                tint = MaterialTheme.colors.primary
-                        )
-                        },
+                        title = { Text("Career") },
                         backgroundColor = MaterialTheme.colors.background,
-//            contentColor = MaterialTheme.colors.primary
+                        contentColor = Color.Black,
+                        navigationIcon = {
+                                IconButton(onClick = { backArrowClicked() }) {
+                                        Icon(
+                                                imageVector = Icons.Default.ArrowBack,
+                                                contentDescription = "Back Arrow",
+                                                tint = Color.Black
+                                        )
+                                }
+                        }
                 )
 
-//                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-//
-//                        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-//
-//
-//                                OutlinedTextField(
-//                                        value = careerSearchViewModel.keyword.value,
-//                                        onValueChange = { careerSearchViewModel.onKeywordChange(it) },
-//                                        placeholder = { Text(text = "Type Keyword") },
-//                                        modifier = Modifier.fillMaxWidth(),
-//                                        textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
-//                                )
-//
-//
-//                        }
-//
-//                        Divider(modifier = Modifier.padding(vertical = 8.dp))
-//
-////                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-////                    val careers = careerFinderViewModel.careers.value
-////
-////                    careers.forEach { careerData ->
-////                        SelectableCareerItem(career = careerData) {
-////                            careerFinderViewModel.careerSelectionToggled(careerData)
-////                        }
-////                        Divider()
-////                    }
-////                }
-//
-//                        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-//                                val careers = careerSearchViewModel.careers.value
-//                                Log.d("ExploreViewModel", "Category data retrieved: $careers")
-//
-//                                careers.forEach { careerData ->
-//                                        SearchItem(career = careerData, onClick = {
-////                        careerFinderViewModel.careersSubmitted()
-////                        context.startActivity(Intent(context, CareerGuideActivity::class.java))
-//                                                // Navigate to the career details page
-//                                        })
-//                                        Divider()
-//                                }
-//                        }
-//
-//
-//                }
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        if (career != null) {
+                                CareerDetails(career = career!!,  programs = programs, colleges = colleges)
+                        } else {
+                                Text(text = "No career available")
+                        }
+                }
         }
 }
 
 class CareerDescriptionViewModel : ViewModel() {
+        val career: MutableState<Career?> = mutableStateOf(null)
+        val program: MutableState<List<Program>> = mutableStateOf(listOf())
+        val college: MutableState<List<College>> = mutableStateOf(listOf())
+//        private var careerPrograms: Map<Career, List<ProgramAlt>> = mapOf()
 
+        private lateinit var db: TsogoloDatabase
+
+        fun initialize(context: Context, careerId: Int) {
+                db = TsogoloDatabase.getInstance(context)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                                val careersById = db.careerDao().getCareerById(careerId)
+                                val careerPrograms = db.programDao().getProgramsForCareer(careerId)
+                                val ProgramCollege = db.collegeDao().getAllCollege(careerId)
+                                career.value = careersById.firstOrNull()
+                                program.value = careerPrograms
+                                college.value = ProgramCollege
+                                Log.d("CategoryViewModel", "Careers program id: $careerPrograms")
+                                Log.d("CategoryViewModel", "Careers retrieved: $careersById")
+                        } catch (e: Exception) {
+                                Log.e("CategoryViewModel", "Failed to retrieve careers: ${e.message}")
+                        }
+                }
+        }
 }
 
-//@Composable
-//fun ParallaxToolbar(recipe: Recipe, scrollState: LazyListState) {
-//        val imageHeight = AppBarExpendedHeight - AppBarCollapsedHeight
-//
-//        val maxOffset =
-//                with(LocalDensity.current) { imageHeight.roundToPx() } - LocalWindowInsets.current.systemBars.layoutInsets.top
-//
-//        val offset = min(scrollState.firstVisibleItemScrollOffset, maxOffset)
-//
-//        val offsetProgress = max(0f, offset * 3f - 2f * maxOffset) / maxOffset
-//
-//        TopAppBar(
-//                contentPadding = PaddingValues(),
-//                backgroundColor = White,
-//                modifier = Modifier
-//                        .height(
-//                                AppBarExpendedHeight
-//                        )
-//                        .offset { IntOffset(x = 0, y = -offset) },
-//                elevation = if (offset == maxOffset) 4.dp else 0.dp
-//        ) {
-//                Column {
-//                        Box(
-//                                Modifier
-//                                        .height(imageHeight)
-//                                        .graphicsLayer {
-//                                                alpha = 1f - offsetProgress
-//                                        }) {
-//                                Image(
-//                                        painter = painterResource(id = R.drawable.strawberry_pie_1),
-//                                        contentDescription = null,
-//                                        contentScale = ContentScale.Crop,
-//                                        modifier = Modifier.fillMaxSize()
-//                                )
-//
-//                                Box(
-//                                        modifier = Modifier
-//                                                .fillMaxSize()
-//                                                .background(
-//                                                        Brush.verticalGradient(
-//                                                                colorStops = arrayOf(
-//                                                                        Pair(0.4f, Transparent),
-//                                                                        Pair(1f, White)
-//                                                                )
-//                                                        )
-//                                                )
-//                                )
-//
-//                                Row(
-//                                        modifier = Modifier
-//                                                .fillMaxHeight()
-//                                                .padding(horizontal = 16.dp, vertical = 8.dp),
-//                                        verticalAlignment = Alignment.Bottom
-//                                ) {
-//                                        Text(
-//                                                recipe.category,
-//                                                fontWeight = FontWeight.Medium,
-//                                                modifier = Modifier
-//                                                        .clip(Shapes.small)
-//                                                        .background(LightGray)
-//                                                        .padding(vertical = 6.dp, horizontal = 16.dp)
-//                                        )
-//                                }
-//                        }
-//                        Column(
-//                                Modifier
-//                                        .fillMaxWidth()
-//                                        .height(AppBarCollapsedHeight),
-//                                verticalArrangement = Arrangement.Center
-//                        ) {
-//                                Text(
-//                                        recipe.title,
-//                                        fontSize = 26.sp,
-//                                        fontWeight = FontWeight.Bold,
-//                                        modifier = Modifier
-//                                                .padding(horizontal = (16 + 28 * offsetProgress).dp)
-//                                                .scale(1f - 0.25f * offsetProgress)
-//                                )
-//
-//                        }
-//                }
-//        }
-//
-//        Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                modifier = Modifier
-//                        .fillMaxWidth()
-//                        .statusBarsPadding()
-//                        .height(AppBarCollapsedHeight)
-//                        .padding(horizontal = 16.dp)
-//        ) {
-//                CircularButton(R.drawable.ic_arrow_back)
-//                CircularButton(R.drawable.ic_favorite)
-//        }
-//}
+@Composable
+fun CareerDetails(career: Career, programs: List<Program>, colleges: List<College>) {
+        Column(
+                modifier = Modifier.padding(16.dp)
+        ) {
+                Box(
+                        modifier = Modifier
+                                .size(80.dp)
+                                .background(color = MaterialTheme.colors.primary, shape = CircleShape),
+                        contentAlignment = Alignment.Center
+                ) {
+                        career.title?.substring(0, 2)?.let {
+                                Text(
+                                        text = it.uppercase(Locale.ENGLISH),
+                                        style = Typography.h3.copy(color = Color.White),
+                                        textAlign = TextAlign.Center
+                                )
+                        }
+                }
 
+                Spacer(modifier = Modifier.height(8.dp))
 
+                Text(
+                        text = career.title.toString(),
+                        style = Typography.h6.copy(fontWeight = FontWeight.Bold),
+                        textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                        text = career.description.toString(),
+                        style = Typography.body1,
+                        textAlign = TextAlign.Justify
+                )
+
+                if (programs.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                                text = "Available Programs:",
+                                style = Typography.subtitle1.copy(fontWeight = FontWeight.Bold),
+                                textAlign = TextAlign.Start
+                        )
+
+                        programs.forEach { program ->
+                                Text(
+                                        text = program.name.toString(),
+                                        style = Typography.body1,
+                                        textAlign = TextAlign.Start
+                                )
+                        }
+                }
+
+                if (colleges.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                                text = "Available Colleges:",
+                                style = Typography.subtitle1.copy(fontWeight = FontWeight.Bold),
+                                textAlign = TextAlign.Start
+                        )
+
+                        colleges.forEach { college ->
+                                Text(
+                                        text = college.name.toString(),
+                                        style = Typography.body1,
+                                        textAlign = TextAlign.Start
+                                )
+                        }
+                }
+        }
+}
+
+@Composable
+fun ProfileEntry(key: String, value: String) {
+        Row(modifier = Modifier.padding(vertical = 4.dp)) {
+                Text(
+                        text = key,
+                        style = Typography.subtitle2.copy(
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = FontFamily.SansSerif
+                        ),
+                        modifier = Modifier.width(128.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                        text = value,
+                        style = Typography.subtitle2.copy(
+                                fontWeight = FontWeight.Normal,
+                                fontFamily = FontFamily.SansSerif
+                        )
+                )
+        }
+}

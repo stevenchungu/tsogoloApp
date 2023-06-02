@@ -3,6 +3,8 @@ package com.example.tsogolo.ui.explore
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tsogolo.database.TsogoloDatabase
 import com.example.tsogolo.model.Career
 import com.example.tsogolo.model.Category
+import com.example.tsogolo.ui.career.CareerDescriptionActivity
 import com.example.tsogolo.ui.career.CareerSearchActivity
 import com.example.tsogolo.ui.components.SearchItem
 import com.example.tsogolo.ui.theme.Typography
@@ -52,7 +55,7 @@ fun categoryDetail(
 
     val careers = categoryViewModel.careers.value
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()) {
         TopAppBar(
             title = { Text("Career") },
             backgroundColor = MaterialTheme.colors.background,
@@ -79,20 +82,26 @@ fun categoryDetail(
             }
         )
 
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 8.dp).shadow(2.dp)) {
             if (careers.isNotEmpty()) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(careers) { career ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 2.dp),
-                            elevation = 0.dp
+                                .padding(2.dp),
+                            elevation = 4.dp
                         ) {
                             Column(
                                 modifier = Modifier
                                     .padding(16.dp)
-                                    .fillMaxWidth()
+                                    .clickable { career.id?.let {
+                                        Log.d("CategoryViewModel", "tione: ${career.id}")
+                                        val intent = Intent(context, CareerDescriptionActivity::class.java).apply {
+                                            putExtra("careerId", career.id)
+                                        }
+                                        context.startActivity(intent)
+                                    } }, // Add clickable modifier and onClick callback
                             ) {
                                 // Display career details here inside the card
                                 Text(text = career.title.toString())
@@ -107,6 +116,15 @@ fun categoryDetail(
         }
 
     }
+}
+
+@Composable
+private fun openCareerDescriptionActivity(careerId: Int) {
+    val context = LocalContext.current
+    val intent = Intent(context, CareerDescriptionActivity::class.java).apply {
+        putExtra("careerId", careerId)
+    }
+    context.startActivity(intent)
 }
 
 class CategoryViewModel : ViewModel() {
@@ -128,4 +146,6 @@ class CategoryViewModel : ViewModel() {
             }
         }
     }
+
+
 }
