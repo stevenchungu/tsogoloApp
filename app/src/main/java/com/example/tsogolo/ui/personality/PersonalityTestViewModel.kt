@@ -3,28 +3,26 @@ package com.example.tsogolo.ui.personality
 import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.tsogolo.database.TsogoloDatabase
 import com.example.tsogolo.model.Personality
+import com.example.tsogolo.model.PersonalityQuestion
 import com.example.tsogolo.model.User
 import com.example.tsogolo.model.UserPersonality
-import com.example.tsogolo.ui.personality.ApiQuestionData.Companion.toJsonRequestBody
-import com.google.gson.Gson
+import com.example.tsogolo.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
 
 
-class PersonalityTestViewModel : ViewModel() {
+class PersonalityTestViewModel() : ViewModel() {
 
     val canSubmit: MutableState<Boolean> = mutableStateOf(false)
     val question: MutableState<QuestionData> = mutableStateOf(QuestionData(0,))
+
 
     private var questions: List<QuestionData> = listOf()
     private var user: User = User()
@@ -37,14 +35,36 @@ class PersonalityTestViewModel : ViewModel() {
     var progressValue: MutableState<Float> = mutableStateOf(0f)
     private var answeredQuestionCount = 0
     private val totalQuestions: Int = 20
-
-    val answeredQuestions: MutableState<Int> = mutableStateOf(0)
-
-
+    var apiResponse : List<PersonalityQuestion> by mutableStateOf(listOf())
+    var errorMassage : String by mutableStateOf("")
     fun initialize(context: Context, userId: Int, onSubmitted: () -> Unit) {
+
         this.onSubmitted = onSubmitted
         db = TsogoloDatabase.getInstance(context)
         CoroutineScope(IO).launch {
+
+            val apiService = ApiService.getInstance()
+            try {
+                val questionData = apiService.getPersonalityQuestions()
+                apiResponse = questionData
+                Log.d("Questions", apiResponse.toString())
+            }
+            catch (e:Exception){
+                errorMassage = e.message.toString()
+                Log.d("Questions", "error occured $errorMassage")
+            }
+
+            for (question in apiResponse) {
+                val questionId = question.id
+                val questionText = question.question
+                // Access other properties as needed
+                Log.d("Question ID", questionId.toString())
+                if (questionText != null) {
+                    Log.d("Question Text", questionText)
+                }
+            }
+
+
             user = db.userDao().getById(userId)
             questions = db.personalityQuestionDao().getAll().mapIndexed {i, it ->
                 QuestionData(
@@ -63,55 +83,6 @@ class PersonalityTestViewModel : ViewModel() {
     }
 
     fun questionsSubmitted() {
-
-        val apiQuestions = questions.map {questionData ->
-            ApiQuestionData(
-                id = questionData.id,
-                question = questionData.question,
-                agreeType = questionData.agreedType.toString(),
-                denialType = questionData.denyType.toString()
-            )
-        }
-
-        val apiEndPoint = "http://localhost:3000/personality-questions/"
-        val retrofit = Retrofit.Builder()
-           .baseUrl(apiEndPoint)
-           .addConverterFactory(GsonConverterFactory.create())
-           .build()
-
-        val apiService = retrofit.create(ApiService::class.java)
-        val requestBody = apiQuestions.toJsonRequestBody()
-
-        apiService.storePersonalityQuestions(requestBody).enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                // Handle API request success
-                if(response.isSuccessful){
-                    val responseCode = response.code() // Get the response code
-                    val headers = response.headers() // Get the response headers
-
-                    // Log response code
-                    Log.d("API", "Response Code: $responseCode")
-
-                    // Log headers
-                    Log.d("API", "Headers:")
-                    headers.names().forEach { name ->
-                        Log.d("API", "$name: ${headers[name]}")
-                    }
-
-
-                }else{
-                    Log.e("API", "API request failed: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                // Handle API request failure
-                Log.e("Error", t.toString())
-            }
-        })
-
-
-
         // Progress calculations
 
         val progress = answeredQuestionCount.toFloat() / totalQuestions.toFloat()
@@ -154,17 +125,17 @@ class PersonalityTestViewModel : ViewModel() {
             val p2 = personalities.first { it.type == type2 }
             db.userPersonalityDao()
                 .insertAll(listOf(
-                        UserPersonality(
-                            user.id!!,
-                            p1.id!!,
-                            rank = 0
-                        ),
-                        UserPersonality(
-                            user.id!!,
-                            p2.id!!,
-                            rank = 1
-                        )
+                    UserPersonality(
+                        user.id!!,
+                        p1.id!!,
+                        rank = 0
+                    ),
+                    UserPersonality(
+                        user.id!!,
+                        p2.id!!,
+                        rank = 1
                     )
+                )
                 )
             onSubmitted()
         }
@@ -252,17 +223,3 @@ data class QuestionData(
     var denied: MutableState<Boolean> = mutableStateOf(false),
 )
 
-data class ApiQuestionData(
-    val id: Int,
-    val question: String,
-    val agreeType: String,
-    val denialType: String
-) {
-    companion object {
-        fun List<ApiQuestionData>.toJsonRequestBody(): RequestBody {
-            val jsonString = Gson().toJson(this)
-            val mediaType = "application/json".toMediaType()
-            return jsonString.toRequestBody(mediaType)
-        }
-    }
-}

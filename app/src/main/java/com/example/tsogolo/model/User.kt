@@ -12,7 +12,7 @@ class User(
     var eduLevel: String = MSCE
 ) {
     companion object EduLevel {
-        const val PLSCE = "PLSCE"
+        const val JCE = "JCE"
         const val MSCE = "MSCE"
     }
 
