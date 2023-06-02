@@ -15,6 +15,9 @@ interface CareerDao {
     @Query("SELECT * FROM Career ORDER BY title")
     suspend fun getAll(): List<Career>
 
+    @Query("SELECT * FROM Career WHERE id = :careerId ORDER BY title")
+    suspend fun getCareerById(careerId: Int): List<Career>
+
 //    @Query("SELECT * FROM CareerCategory")
 //    suspend fun careerCategor(): List<CareerCategory>
 
@@ -41,6 +44,8 @@ interface CareerDao {
             "JOIN CareerCategory ON Career.id = CareerCategory.careerID " +
             "WHERE CareerCategory.categoryID = :categoryId")
     suspend fun getCareersByCategory(categoryId: Int): List<Career>
+
+
 
 
 

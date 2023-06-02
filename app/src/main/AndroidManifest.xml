@@ -41,11 +41,11 @@
             android:exported="false"
             android:label="explore"
             android:theme="@style/Theme.Tsogolo" />
-<!--        <activity-->
-<!--            android:name=".ui.career.CareerDescriptionActivity"-->
-<!--            android:exported="false"-->
-<!--            android:label="Search"-->
-<!--            android:theme="@style/Theme.Tsogolo" />-->
+        <activity
+            android:name=".ui.career.CareerDescriptionActivity"
+            android:exported="false"
+            android:label="career Description"
+            android:theme="@style/Theme.Tsogolo" />
         <activity
             android:name=".ui.personality.PersonalityDescriptionActivity"
             android:exported="true"

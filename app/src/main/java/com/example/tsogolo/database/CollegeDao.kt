@@ -22,4 +22,11 @@ interface CollegeDao {
             "JOIN CollegeProgram ON College.id = CollegeProgram.collegeId " +
             "WHERE CollegeProgram.programId = :programId")
     suspend fun getAllProgram(programId: Int?): List<College>
+
+    @Query("SELECT * FROM College " +
+            "JOIN CollegeProgram ON College.id = CollegeProgram.collegeId " +
+            "JOIN ProgramCareer ON CollegeProgram.programId = ProgramCareer.programId " +
+            "WHERE ProgramCareer.careerId = :careerId")
+    suspend fun getAllCollege(careerId: Int?): List<College>
+
 }

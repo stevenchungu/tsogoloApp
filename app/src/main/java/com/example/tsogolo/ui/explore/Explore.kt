@@ -4,6 +4,7 @@ package com.example.tsogolo.ui.explore
 import android.app.Application
 import android.content.Intent
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -55,7 +56,7 @@ fun exploreCareer(
 
     val categoryList = exploreViewModel.categor.value
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()) {
 
         TopAppBar(
             title = { Text("Career") },

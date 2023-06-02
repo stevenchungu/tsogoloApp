@@ -13,6 +13,10 @@ interface ProgramDao {
     fun getAll(): Flow<List<Program>>
 
     @Query("SELECT Program.* FROM Program JOIN ProgramCareer ON Program.id = ProgramCareer.programId " +
+            " WHERE ProgramCareer.careerId = :careerId ")
+    suspend fun getProgramsForCareer(careerId: Int): List<Program>
+
+    @Query("SELECT Program.* FROM Program JOIN ProgramCareer ON Program.id = ProgramCareer.programId " +
             "JOIN PreferredCareer ON ProgramCareer.careerId = PreferredCareer.careerId " +
             "WHERE PreferredCareer.userId = :userId ORDER BY PreferredCareer.rank")
     suspend fun getAllOf(userId: Int): List<Program>
