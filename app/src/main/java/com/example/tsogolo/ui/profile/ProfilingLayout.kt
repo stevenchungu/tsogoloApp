@@ -37,50 +37,73 @@ import com.example.tsogolo.ui.theme.Typography
 fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit) {
     val stateData = viewModel.profileData
 
-    Column(modifier = Modifier
-        .background(color = MaterialTheme.colors.background)
-        .fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .background(color = MaterialTheme.colors.background)
+            .fillMaxSize()
+    ) {
         TopAppBar(
             title = { Text("Create Profile") },
             backgroundColor = MaterialTheme.colors.background,
             contentColor = Color.Black,
-            navigationIcon = { Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back Arrow",
-                Modifier.clickable { backArrowClicked() },
-                tint = Color.Black
-            ) },
+            navigationIcon = {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back Arrow",
+                    Modifier.clickable { backArrowClicked() },
+                    tint = Color.Black
+                )
+            },
         )
 
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Text(
-                text = "Fill the form below then click the save profile button.",
+                text = "Fill the form below then click the save profile button to create your profile.",
                 modifier = Modifier
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                     .align(Alignment.CenterHorizontally),
-                style = Typography.body1.copy(color = Color.Black, fontFamily = FontFamily.SansSerif)
+                style = Typography.body1.copy(
+                    color = Color.Black,
+                    fontFamily = FontFamily.SansSerif
+                )
             )
 
             Column(modifier = Modifier.padding(16.dp)) {
                 OutlinedTextField(
-                    value = stateData.value.name.value, onValueChange = {viewModel.nameChanged(it)},
-                    label = { Text(text = "Enter your name",
-                        color = Color.Black
-                    ) },
+                    value = stateData.value.name.value,
+                    onValueChange = { viewModel.nameChanged(it) },
+                    label = {
+                        Text(
+                            text = "Enter your name",
+                            color = Color.Black
+                        )
+                    },
                     modifier = Modifier
                         .width(IntrinsicSize.Max)
                         .padding(all = 8.dp),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color(0xFF0eF7729)),
-                    textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
+                        focusedBorderColor = Color(0xFF0eF7729)
+                    ),
+                    textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = if (stateData.value.name.value.isNotEmpty()) ImeAction.Done else ImeAction.Default
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (stateData.value.name.value.isNotEmpty()) {
+                                viewModel.saveProfile()
+                            }
+                        }
+                    )
                 )
-                Divider(modifier = Modifier.padding(top = 16.dp))
 
 
                 Divider(modifier = Modifier.padding(top = 16.dp))
 
                 Column {
-                    Text(text = "Education Level",
+                    Text(
+                        text = "Education Level",
                         modifier = Modifier
                             .padding(bottom = 8.dp, top = 16.dp),
                         style = Typography.body2.copy(color = MaterialTheme.colors.onSurface)
@@ -92,7 +115,8 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                                     selectedColor = Color(0xFF0eF7729)
                                 ),
                                 onClick = { viewModel.onEdulevelSelected(level) })
-                            Text(text = level,
+                            Text(
+                                text = level,
                                 modifier = Modifier.padding(start = 16.dp),
                                 textAlign = TextAlign.Center,
                                 color = MaterialTheme.colors.onSurface
@@ -104,11 +128,12 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                 Divider()
 
                 Column {
-                    Text(text = "Grades (Points Scored in Chosen Education Level) A is 1, B is 2...",
+                    Text(
+                        text = "Grades (Points Scored in Chosen Education Level) A is 1, B is 2...",
                         modifier = Modifier
                             .padding(bottom = 8.dp, top = 16.dp),
 
-                    )
+                        )
                     stateData.value.subjectGrades.value.forEachIndexed { i, it ->
                         Row(modifier = Modifier.padding(bottom = 8.dp)) {
                             Text(
@@ -126,10 +151,10 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
                                 isError = !it.second.isDigitsOnly() && it.second.isNotEmpty(),
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Number,
-                                    imeAction = ImeAction.Done // Set the IME action to Done
+                                    imeAction = ImeAction.Next // Set the IME action to Next
                                 ),
                                 keyboardActions = KeyboardActions(
-                                    onDone = { focusManager.clearFocus() } // Clear focus to hide the keyboard
+                                    onDone = { focusManager.moveFocus(FocusDirection.Down) } // Shift focus to the next field
                                 ),
                                 textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface),
                                 colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -143,22 +168,25 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Button(onClick = { viewModel.saveProfile() },
+                Button(
+                    onClick = { viewModel.saveProfile() },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 16.dp)
                         .height(56.dp),
                     enabled = stateData.value.name.value.isNotBlank()
                             && !stateData.value.saving.value && !stateData.value.saved.value,
-                            colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(0xFF0eF7729))
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFF0eF7729)
+                    )
                 ) {
-                    Text(text = when {
-                        stateData.value.saving.value -> "Saving..."
-                        stateData.value.saved.value -> "Saved"
-                        else -> "Save Profile"
+                    Text(
+                        text = when {
+                            stateData.value.saving.value -> "Saving..."
+                            stateData.value.saved.value -> "Saved"
+                            else -> "Save Profile"
 
-                    },
+                        },
                         color = Color.White
                     )
                 }
@@ -166,13 +194,3 @@ fun ProfilingLayout(viewModel: ProfilingViewModel, backArrowClicked: () -> Unit)
         }
     }
 }
-
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    TsogoloTheme {
-        ProfilingLayout()
-    }
-}*/

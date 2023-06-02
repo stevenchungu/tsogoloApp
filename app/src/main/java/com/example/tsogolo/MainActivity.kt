@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                     openFirstLaunchActivity()
                 } else {
                     users = it
+
                 }
             }
         }
