@@ -18,7 +18,7 @@
     <string name="title_activity_personality_test">PersonalityTestActivity</string>
     <string name="title_activity_career_guide">CareerGuideActivity</string>
     <string name="title_activity_personality_description">PersonalityDescriptionActivity</string>
-    <string name="title_activity_first_launch">FirstLaunchActivity</string>
+    <string name="title_activity_first_launch">Tsogolo</string>
     <string name="dark_mode"><b>Dark Mode</b></string>
     <string name="light_mode">Light Mode</string>
     <string name="title_activity_job_details" />

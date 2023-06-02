@@ -23,9 +23,15 @@
             android:theme="@style/Theme.Tsogolo" />
         <activity
             android:name=".ui.FirstLaunchActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_first_launch"
-            android:theme="@style/Theme.Tsogolo" />
+            android:theme="@style/Theme.Tsogolo">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.career.CareerSearchActivity"
             android:exported="false"
@@ -41,11 +47,7 @@
             android:exported="false"
             android:label="explore"
             android:theme="@style/Theme.Tsogolo" />
-<!--        <activity-->
-<!--            android:name=".ui.career.CareerDescriptionActivity"-->
-<!--            android:exported="false"-->
-<!--            android:label="Search"-->
-<!--            android:theme="@style/Theme.Tsogolo" />-->
+
         <activity
             android:name=".ui.personality.PersonalityDescriptionActivity"
             android:exported="true"
@@ -76,11 +78,6 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Tsogolo.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

@@ -1,6 +1,7 @@
 package com.example.tsogolo
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -149,11 +150,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }*/
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -178,4 +174,11 @@ class MainActivity : AppCompatActivity() {
             finishAndRemoveTask()
         }
     }
+   companion object{
+       @JvmStatic
+       fun start(context: Context){
+           val starter = Intent(context, MainActivity::class.java)
+           context.startActivity(starter)
+       }
+   }
 }
