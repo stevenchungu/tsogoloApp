@@ -1,9 +1,6 @@
 package com.example.tsogolo.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.tsogolo.model.PersonalityQuestion
 
 @Dao
@@ -13,5 +10,13 @@ interface PersonalityQuestionDao {
     suspend fun getAll(): List<PersonalityQuestion>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(personalityQuestion: List<PersonalityQuestion>)
+    suspend fun insert(question: PersonalityQuestion)
+
+    @Update
+    suspend fun update(question: PersonalityQuestion)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(questions: List<PersonalityQuestion>)
+
+
 }

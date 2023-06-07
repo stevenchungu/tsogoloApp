@@ -38,49 +38,54 @@ class PersonalityTestViewModel() : ViewModel() {
     var apiResponse : List<PersonalityQuestion> by mutableStateOf(listOf())
     var errorMassage : String by mutableStateOf("")
     fun initialize(context: Context, userId: Int, onSubmitted: () -> Unit) {
-
         this.onSubmitted = onSubmitted
         db = TsogoloDatabase.getInstance(context)
         CoroutineScope(IO).launch {
-
             val apiService = ApiService.getInstance()
-            try {
-                val questionData = apiService.getPersonalityQuestions()
-                apiResponse = questionData
-                Log.d("Questions", apiResponse.toString())
-            }
-            catch (e:Exception){
+            val questionData = try {
+                apiService.getPersonalityQuestions()
+            } catch (e: Exception) {
                 errorMassage = e.message.toString()
-                Log.d("Questions", "error occured $errorMassage")
+                Log.d("Questions", "error occurred $errorMassage")
+                emptyList()
             }
 
-            for (question in apiResponse) {
-                val questionId = question.id
-                val questionText = question.question
-                // Access other properties as needed
-                Log.d("Question ID", questionId.toString())
-                if (questionText != null) {
-                    Log.d("Question Text", questionText)
+            val existingQuestions = db.personalityQuestionDao().getAll()
+
+            // Iterate through the API questions and update or insert them in the local database
+            questionData.forEach { apiQuestion ->
+                val existingQuestion = existingQuestions.find { it.id == apiQuestion.id }
+                if (existingQuestion != null) {
+                    // Update existing question in the local database
+                    existingQuestion.question = apiQuestion.question
+                    existingQuestion.agreeType = apiQuestion.agreeType
+                    existingQuestion.denialType = apiQuestion.denialType
+                    db.personalityQuestionDao().update(existingQuestion)
+                } else {
+                    // Insert new question into the local database
+                    db.personalityQuestionDao().insert(apiQuestion)
                 }
             }
 
-
-            user = db.userDao().getById(userId)
-            questions = db.personalityQuestionDao().getAll().mapIndexed {i, it ->
+            // Fetch updated questions from the local database
+            questions = db.personalityQuestionDao().getAll().mapIndexed { i, it ->
                 QuestionData(
                     id = it.id!!,
-                    question = "${i+1}.  " + it.question!!,
-                    agreedType = it.agreeType.toCharArray()[0],
-                    denyType = it.denialType.toCharArray()[0]
+                    question = "${i + 1}.  ${it.question}",
+                    agreedType = it.agreeType[0],
+                    denyType = it.denialType[0]
                 )
             }
+
             questions.firstOrNull()?.let {
                 question.value = it
             }
 
+            user = db.userDao().getById(userId)
             personalities = db.personalityDao().getAll()
         }
     }
+
 
     fun questionsSubmitted() {
         // Progress calculations
