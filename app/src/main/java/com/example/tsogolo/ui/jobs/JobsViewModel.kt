@@ -5,6 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.tsogolo.models.Job
+import com.example.tsogolo.network.ApiService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class JobsViewModel : ViewModel() {
     private val jobRepository = JobRepository() // Assuming you have a JobRepository implementation
@@ -31,10 +35,17 @@ class JobsViewModel : ViewModel() {
     }
 
     fun loadJobs() {
-        // Retrieve jobs from the repository or API
-        val fetchedJobs = jobRepository.getJobs()
-        allJobs = fetchedJobs
-        _jobs.value = fetchedJobs
+        // Retrieve jobs from the repository or API using coroutines
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val fetchedJobs = jobRepository.getJobs()
+                allJobs = fetchedJobs
+                _jobs.value = fetchedJobs
+            } catch (e: Exception) {
+                // Handle any errors or exceptions here
+                // For example, you can show an error message to the user
+            }
+        }
     }
 
     fun setSearchQuery(query: String) {
@@ -55,32 +66,25 @@ class JobsViewModel : ViewModel() {
 
     fun updateJobs() {
         val jobs = if (_selectedCategories.value.isEmpty()) allJobs else allJobs.filter { job ->
-            _selectedCategories.value.contains(job.category)
+            _selectedCategories.value.contains(job.sector)
         }
         _jobs.value = jobs.filter {
             it.title.contains(searchQuery.value, ignoreCase = true) ||
-            it.company.contains(searchQuery.value, ignoreCase = true) ||
+            it.sector.contains(searchQuery.value, ignoreCase = true) ||
             it.location.contains(searchQuery.value, ignoreCase = true)
         }
     }
 
-    fun getJob(jobId: String): Job {
+    fun getJob(jobId: Int): Job {
         return allJobs.first { it.id == jobId }
     }
 }
 
 class JobRepository {
-    // Simulated list of jobs
-    private val jobs: List<Job> = listOf(
-        Job("1", "Job Title 1", "Company A", "Location A", "2023-05-01", "https://example.com/image1.jpg"),
-        Job("2", "Job Title 2", "Company B", "Location B", "2023-05-02", "https://example.com/image2.jpg"),
-        Job("3", "Job Title 3", "Company C", "Location C", "2023-05-03", "https://example.com/image3.jpg"),
-        Job("4", "Job Title 4", "Company D", "Location D", "2023-05-04", "https://example.com/image4.jpg"),
-        Job("5", "Job Title 5", "Company E", "Location E", "2023-05-05", "https://example.com/image5.jpg")
-    )
 
-    fun getJobs(): List<Job> {
+
+    suspend fun getJobs(): List<Job> {
         // Return the list of jobs
-        return jobs
+        return ApiService.getInstance().getJobs()
     }
 }

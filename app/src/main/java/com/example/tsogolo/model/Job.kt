@@ -1,13 +1,12 @@
 package com.example.tsogolo.models
 
 data class Job(
-    val id: String,
+    val id: Int,
     val title: String,
-    val company: String,
+    val sector: String,
     val location: String,
-    val datePosted: String,
-    val imageUrl: String,
-    val description: String = "Job Description",
-    val category: String = ""
+    val time: String,
+    val summary: String = "Job Description",
+
 ) {
 }
