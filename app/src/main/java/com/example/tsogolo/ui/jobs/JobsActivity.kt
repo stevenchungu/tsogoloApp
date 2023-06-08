@@ -72,7 +72,7 @@ class JobsActivity : ComponentActivity() {
                         SearchBar(viewModel = viewModel)
 
                         // Filter Chips
-                        LazyRow(modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
+                        /*LazyRow(modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
                             items(viewModel.jobCategories.size) { category ->
                                 FilterChip(
                                     selected = viewModel.selectedCategories.value.contains(viewModel.jobCategories[category]),
@@ -87,7 +87,7 @@ class JobsActivity : ComponentActivity() {
                                 }
                                 Spacer(modifier = Modifier.size(8.dp))
                             }
-                        }
+                        }*/
 
                         // List of Jobs
                         LazyColumn(
@@ -113,17 +113,17 @@ fun JobItem(job: Job, activity: JobsActivity) {
             .fillMaxWidth()
             .clickable {
                 val intent = Intent(activity, JobDetailsActivity::class.java)
-                intent.putExtra("jobId", job.id)
+                intent.putExtra("jobId", job)
                 activity.startActivity(intent)
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Company Image
+        /*// Company Image
         Icon(
             painter = painterResource(id = R.drawable.ic_launcher_background),
             contentDescription = "Company Logo",
             modifier = Modifier.size(64.dp)
-        )
+        )*/
 
         Column(
             modifier = Modifier.padding(start = 16.dp)
@@ -139,27 +139,30 @@ fun JobItem(job: Job, activity: JobsActivity) {
                 fontSize = 14.sp,
 
             )
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text(
+                text = job.location,
+                style = MaterialTheme.typography.body2,
+                fontSize = 12.sp
+            )
+            Text(
+                text = job.time,
+                style = MaterialTheme.typography.body2,
+                fontSize = 12.sp
+            )
+            Divider(modifier = Modifier.padding(vertical = 8.dp))
+            /*CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = job.location,
-                        style = MaterialTheme.typography.body2,
-                        fontSize = 12.sp
-                    )
+
                     Text(
                         text = " • ",
                         style = MaterialTheme.typography.body2,
                         fontSize = 12.sp
                     )
-                    Text(
-                        text = job.time,
-                        style = MaterialTheme.typography.body2,
-                        fontSize = 12.sp
-                    )
+
                 }
-            }
+            }*/
 
         }
     }

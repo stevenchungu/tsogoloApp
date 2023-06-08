@@ -3,6 +3,7 @@ package com.example.tsogolo.ui.jobs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -28,16 +29,15 @@ import com.example.tsogolo.ui.theme.TsogoloTheme
 
 class JobDetailsActivity : ComponentActivity() {
 
-    private lateinit var jobsViewModel: JobsViewModel
+    private val jobsViewModel: JobsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val jobId = intent.getStringExtra("jobId")!!
-        jobsViewModel = ViewModelProvider(this).get(JobsViewModel::class.java)
+        val job = intent.getSerializableExtra("jobId") as Job
 
         setContent {
             TsogoloTheme(this@JobDetailsActivity) {
-                JobDetailsScreen(jobsViewModel.getJob(jobId), this@JobDetailsActivity)
+                JobDetailsScreen(job, this@JobDetailsActivity)
             }
         }
     }
@@ -87,7 +87,7 @@ fun JobDetailsScreen(job: Job, activity: ComponentActivity? = null) {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = job.company,
+                text = job.sector,
                 style = MaterialTheme.typography.subtitle1,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
@@ -97,7 +97,7 @@ fun JobDetailsScreen(job: Job, activity: ComponentActivity? = null) {
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = job.description,
+                text = job.summary,
                 style = MaterialTheme.typography.body1,
                 fontSize = 16.sp
             )

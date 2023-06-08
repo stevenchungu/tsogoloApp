@@ -7,6 +7,6 @@ data class Job(
     val location: String,
     val time: String,
     val summary: String = "Job Description",
+    val company: String
 
-) {
-}
+) : java.io.Serializable
