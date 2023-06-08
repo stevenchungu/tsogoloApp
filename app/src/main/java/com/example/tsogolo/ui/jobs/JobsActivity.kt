@@ -134,7 +134,7 @@ fun JobItem(job: Job, activity: JobsActivity) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = job.company,
+                text = job.sector,
                 style = MaterialTheme.typography.body2,
                 fontSize = 14.sp,
 
@@ -154,7 +154,7 @@ fun JobItem(job: Job, activity: JobsActivity) {
                         fontSize = 12.sp
                     )
                     Text(
-                        text = job.datePosted,
+                        text = job.time,
                         style = MaterialTheme.typography.body2,
                         fontSize = 12.sp
                     )
