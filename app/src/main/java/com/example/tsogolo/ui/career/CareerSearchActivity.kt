@@ -21,23 +21,12 @@ class CareerSearchActivity : ComponentActivity() {
 //            finish()
 //        }
 
-        viewModel.hasNoPersonality = {
-            AlertDialog.Builder(this)
-                .setMessage("It seems you haven't taken a personality test yet." +
-                        "\n\nWould you like to identify your personality?")
-                .setNegativeButton("Later", null)
-                .setPositiveButton("Yes") {_,_ ->
-                    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                        viewModel.updatePersonalities()
-                    }.launch(PersonalityTestActivity.starter(this, viewModel.user))
-                }.create().show()
-        }
 
         setContent {
             TsogoloTheme(this.applicationContext) {
-                CareerSearchLayout(viewModel) {
-                    finish()
-                }
+//                CareerSearchLayout(viewModel) {
+//                    finish()
+//                }
             }
         }
     }

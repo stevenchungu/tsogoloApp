@@ -1,43 +1,31 @@
 package com.example.tsogolo.ui.explore
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tsogolo.database.ProgramAlt
 import com.example.tsogolo.database.TsogoloDatabase
 import com.example.tsogolo.model.Career
-import com.example.tsogolo.model.Category
 import com.example.tsogolo.model.College
 import com.example.tsogolo.model.Program
-import com.example.tsogolo.ui.career.CareerSearchActivity
-import com.example.tsogolo.ui.components.SearchItem
 import com.example.tsogolo.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,20 +50,13 @@ fun careerDescription(
         val colleges = careerDescriptionViewModel.college.value
 
         Column(modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()) {
-                TopAppBar(
-                        title = { Text("Career") },
-                        backgroundColor = MaterialTheme.colors.background,
-                        contentColor = Color.Black,
-                        navigationIcon = {
-                                IconButton(onClick = { backArrowClicked() }) {
-                                        Icon(
-                                                imageVector = Icons.Default.ArrowBack,
-                                                contentDescription = "Back Arrow",
-                                                tint = Color.Black
-                                        )
-                                }
-                        }
-                )
+                IconButton(onClick = { backArrowClicked() }) {
+                        Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back Arrow",
+                                tint = Color.Black
+                        )
+                }
 
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                         if (career != null) {
@@ -121,24 +102,51 @@ fun CareerDetails(career: Career, programs: List<Program>, colleges: List<Colleg
                 modifier = Modifier.padding(16.dp)
         ) {
                 Box(
-                        modifier = Modifier
-                                .size(80.dp)
-                                .background(color = MaterialTheme.colors.primary, shape = CircleShape),
+                        modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                 ) {
-                        career.title?.substring(0, 2)?.let {
+                        Column(
+                                modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                                Box(
+                                        modifier = Modifier
+                                                .size(80.dp)
+                                                .background(color = MaterialTheme.colors.primary),
+                                        contentAlignment = Alignment.Center
+                                ) {
+                                        career.title?.substring(0, 2)?.let {
+                                                Text(
+                                                        text = it.uppercase(Locale.ENGLISH),
+                                                        style = Typography.h3.copy(color = Color.White),
+                                                        textAlign = TextAlign.Center
+                                                )
+                                        }
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
                                 Text(
-                                        text = it.uppercase(Locale.ENGLISH),
-                                        style = Typography.h3.copy(color = Color.White),
+                                        text = career.title.toString(),
+                                        style = Typography.h6.copy(fontWeight = FontWeight.Bold),
                                         textAlign = TextAlign.Center
                                 )
                         }
                 }
 
+
+
+
+
+
                 Spacer(modifier = Modifier.height(8.dp))
 
+
                 Text(
-                        text = career.title.toString(),
+                        text = "Overview",
                         style = Typography.h6.copy(fontWeight = FontWeight.Bold),
                         textAlign = TextAlign.Center
                 )
