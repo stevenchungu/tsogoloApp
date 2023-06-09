@@ -6,12 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -65,42 +60,61 @@ fun JobDetailsScreen(job: Job, activity: ComponentActivity? = null) {
         },
         backgroundColor = Color.White
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .padding(it),
+
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Image(
-                painter = painterResource(id = R.drawable.job), // Replace with the actual image resource
-                contentDescription = "Company Logo",
+            Box(
                 modifier = Modifier
-                    .size(100.dp)
-                    .padding(bottom = 16.dp),
-                contentScale = ContentScale.Fit
-            )
-            Text(
-                text = job.title,
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = job.sector,
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = job.location,
-                style = MaterialTheme.typography.subtitle2,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = job.summary,
-                style = MaterialTheme.typography.body1,
-                fontSize = 16.sp
-            )
+                    .fillMaxSize()
+                    .padding(it),
+
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = job.title,
+                        style = MaterialTheme.typography.h5,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = job.sector,
+                        style = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = job.location,
+                        style = MaterialTheme.typography.subtitle2,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Divider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    )
+                    Text(
+                        text = "Job Description",
+                        style = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = job.summary,
+                        style = MaterialTheme.typography.body1,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+
+
         }
     }
 }
