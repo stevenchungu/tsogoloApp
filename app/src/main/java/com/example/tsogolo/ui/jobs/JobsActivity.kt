@@ -7,14 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardActions
@@ -37,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tsogolo.R
 import com.example.tsogolo.models.Job
 import com.example.tsogolo.ui.theme.TsogoloTheme
+import com.example.tsogolo.ui.theme.Typography
 
 class JobsActivity : ComponentActivity() {
     private val viewModel: JobsViewModel by viewModels()
@@ -94,11 +88,28 @@ class JobsActivity : ComponentActivity() {
                             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                             contentPadding = PaddingValues(bottom = 16.dp)
                         ) {
-                            items(viewModel.jobs.value.size) { job ->
-                                JobItem(job = viewModel.jobs.value[job], activity = this@JobsActivity)
-                                Spacer(modifier = Modifier.size(8.dp))
+//                            val isLoading by viewModel.isLoading.collectAsState()
+
+
+                            if (viewModel.isLoading.value) {
+                                // Display a loading indicator
+                                item {
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        CircularProgressIndicator()
+                                    }
+                                }
+                            } else {
+                                // Display the list of jobs
+                                items(viewModel.jobs.value.size) { job ->
+                                    JobItem(job = viewModel.jobs.value[job], activity = this@JobsActivity)
+                                    Spacer(modifier = Modifier.size(8.dp))
+                                }
                             }
                         }
+
                     }
                 }
             }
@@ -176,22 +187,32 @@ fun SearchBar(viewModel: JobsViewModel) {
         unfocusedIndicatorColor = Color.Gray,
         cursorColor = Color.Gray,
     )
-
-    TextField(
+    OutlinedTextField(
         value = viewModel.searchQuery.value,
-        onValueChange = { viewModel.setSearchQuery(it) },
+        onValueChange = { viewModel.setSearchQuery(it)  },
+        placeholder = { Text(text = "Search Jobs") },
         modifier = Modifier
+            .fillMaxWidth()
             .padding(16.dp)
             .fillMaxWidth(),
-        label = { Text("Search Jobs") },
-        leadingIcon = { Icon(Icons.Default.Search, "Search Icon") },
-        colors = textFieldColors,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { viewModel.updateJobs() }
-        )
+        textStyle = Typography.body1.copy(color = MaterialTheme.colors.onSurface)
     )
+
+//    TextField(
+//        value = viewModel.searchQuery.value,
+//        onValueChange = { viewModel.setSearchQuery(it) },
+//        modifier = Modifier
+//            .padding(16.dp)
+//            .fillMaxWidth(),
+//        label = { Text("Search Jobs") },
+//        leadingIcon = { Icon(Icons.Default.Search, "Search Icon") },
+//        colors = textFieldColors,
+//        keyboardOptions = KeyboardOptions(
+//            keyboardType = KeyboardType.Text,
+//            imeAction = ImeAction.Done
+//        ),
+//        keyboardActions = KeyboardActions(
+//            onDone = { viewModel.updateJobs() }
+//        )
+//    )
 }

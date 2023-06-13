@@ -3,6 +3,7 @@ package com.example.tsogolo.ui.jobs
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tsogolo.models.Job
 import com.example.tsogolo.network.ApiService
@@ -12,6 +13,11 @@ import kotlinx.coroutines.launch
 
 class JobsViewModel : ViewModel() {
     private val jobRepository = JobRepository() // Assuming you have a JobRepository implementation
+     val _isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val isLoading: State<Boolean>
+        get() = _isLoading
+
+
 
     private val _jobs: MutableState<List<Job>> = mutableStateOf(listOf())
     val jobs: State<List<Job>>
@@ -26,6 +32,7 @@ class JobsViewModel : ViewModel() {
     val jobCategories: List<String> = listOf("Engineering", "Design", "Sales", "Marketing", "Customer Support")
 
     private val _searchQuery: MutableState<String> = mutableStateOf("")
+
     val searchQuery: State<String>
         get() = _searchQuery
 
@@ -35,6 +42,7 @@ class JobsViewModel : ViewModel() {
     }
 
     fun loadJobs() {
+        _isLoading.value = true
         // Retrieve jobs from the repository or API using coroutines
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -44,6 +52,9 @@ class JobsViewModel : ViewModel() {
             } catch (e: Exception) {
                 // Handle any errors or exceptions here
                 // For example, you can show an error message to the user
+            }
+            finally {
+                _isLoading.value = false
             }
         }
     }

@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +26,7 @@ import com.example.tsogolo.model.Program
 import com.example.tsogolo.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -40,9 +38,12 @@ fun careerDescription(
         backArrowClicked: () -> Unit
 ) {
         val context = LocalContext.current
+        var showLoader by remember { mutableStateOf(true) }
 
         LaunchedEffect(Unit) {
                 careerDescriptionViewModel.initialize(context, careerId)
+                delay(2000) // Set the waiting time (e.g., 2 seconds)
+                showLoader = false
         }
 
         val career = careerDescriptionViewModel.career.value
@@ -59,10 +60,21 @@ fun careerDescription(
                 }
 
                 Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-                        if (career != null) {
-                                CareerDetails(career = career!!,  programs = programs, colleges = colleges)
+
+                        if (showLoader) {
+                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                        CircularProgressIndicator() // Show the loader
+                                }
                         } else {
-                                Text(text = "No career available")
+                                if (career != null) {
+                                        CareerDetails(
+                                                career = career,
+                                                programs = programs,
+                                                colleges = colleges
+                                        )
+                                } else {
+                                        Text(text = "No career available")
+                                }
                         }
                 }
         }

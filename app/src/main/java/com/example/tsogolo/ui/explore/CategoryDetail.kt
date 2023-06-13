@@ -5,10 +5,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
@@ -17,6 +14,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -31,6 +29,7 @@ import com.example.tsogolo.ui.career.CareerData
 import com.example.tsogolo.ui.career.CareerDescriptionActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -44,10 +43,13 @@ fun categoryDetail(
     val context = LocalContext.current
     remember { mutableStateOf("") }
     val searchActive = remember { mutableStateOf(false) }
+    var showLoader by remember { mutableStateOf(true) }
 
 
     LaunchedEffect(Unit) {
         categoryViewModel.initialize(context, categoryId)
+        delay(1500) // Set the waiting time (e.g., 1 seconds)
+        showLoader = false
     }
 
     val careers = categoryViewModel.career.value
@@ -113,8 +115,10 @@ fun categoryDetail(
         }
 
         Column(modifier = Modifier.padding(vertical = 2.dp).shadow(2.dp)) {
-            if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.fillMaxWidth().padding(16.dp))
+            if (showLoader) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator() // Show the loader
+                }
             } else {
                 if (careers.isNotEmpty()) {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
