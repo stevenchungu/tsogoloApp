@@ -6,22 +6,25 @@ import com.example.tsogolo.util.ApiConstants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiService {
     @GET(ApiConstants.END_POINT)
-    suspend  fun getPersonalityQuestions(): List<PersonalityQuestion>
+    suspend fun getPersonalityQuestions(): List<PersonalityQuestion>
 
     @GET(ApiConstants.JOBS_POINT)
-    suspend  fun getJobs(): List<Job>
+    suspend fun getJobs(@Query("personalityType") personalityType: String): List<Job> // Add the @Query annotation here
 
-    companion object{
-        private var apiService: ApiService?  = null
-        fun getInstance() : ApiService{
-            if (apiService == null){
+    companion object {
+        private var apiService: ApiService? = null
+
+        fun getInstance(): ApiService {
+            if (apiService == null) {
                 apiService = Retrofit.Builder()
                     .baseUrl(ApiConstants.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(ApiService::class.java)
+                    .build()
+                    .create(ApiService::class.java)
             }
             return apiService!!
         }

@@ -5,6 +5,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.tsogolo.database.TsogoloDatabase
+import com.example.tsogolo.model.Personality
+import com.example.tsogolo.model.User
 import com.example.tsogolo.models.Job
 import com.example.tsogolo.network.ApiService
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +19,10 @@ class JobsViewModel : ViewModel() {
      val _isLoading: MutableState<Boolean> = mutableStateOf(false)
     val isLoading: State<Boolean>
         get() = _isLoading
+    val activePersonalities: MutableState<List<Personality>> = mutableStateOf(listOf(Personality()))
+    val activeUser: MutableState<User> = mutableStateOf(User())
+    val users: MutableState<List<User>> = mutableStateOf(listOf(User()))
+    val db = TsogoloDatabase
 
 
 
@@ -29,24 +36,23 @@ class JobsViewModel : ViewModel() {
     val selectedCategories: State<List<String>>
         get() = _selectedCategories
 
-    val jobCategories: List<String> = listOf("Engineering", "Design", "Sales", "Marketing", "Customer Support")
 
     private val _searchQuery: MutableState<String> = mutableStateOf("")
 
     val searchQuery: State<String>
         get() = _searchQuery
 
-    init {
-        // Perform initial data loading or setup here
-        loadJobs()
+    init  {
+        loadJobs("INTJ")
     }
 
-    fun loadJobs() {
+
+    fun loadJobs(personalityType: String) {
         _isLoading.value = true
         // Retrieve jobs from the repository or API using coroutines
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val fetchedJobs = jobRepository.getJobs()
+                val fetchedJobs = jobRepository.getJobs(personalityType) // Pass the personalityType parameter here
                 allJobs = fetchedJobs
                 _jobs.value = fetchedJobs
             } catch (e: Exception) {
@@ -93,9 +99,7 @@ class JobsViewModel : ViewModel() {
 
 class JobRepository {
 
-
-    suspend fun getJobs(): List<Job> {
-        // Return the list of jobs
-        return ApiService.getInstance().getJobs()
+    suspend fun getJobs(personalityType: String): List<Job> {
+        return ApiService.getInstance().getJobs(personalityType) // Pass the personalityType parameter here
     }
 }

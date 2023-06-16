@@ -66,7 +66,7 @@ class JobsActivity : ComponentActivity() {
                         SearchBar(viewModel = viewModel)
 
                         // Filter Chips
-                        /*LazyRow(modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
+                       /* LazyRow(modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp)) {
                             items(viewModel.jobCategories.size) { category ->
                                 FilterChip(
                                     selected = viewModel.selectedCategories.value.contains(viewModel.jobCategories[category]),
@@ -81,7 +81,9 @@ class JobsActivity : ComponentActivity() {
                                 }
                                 Spacer(modifier = Modifier.size(8.dp))
                             }
-                        }*/
+                        }
+                        Divider(modifier = Modifier.padding(vertical = 8.dp))
+                        */
 
                         // List of Jobs
                         LazyColumn(

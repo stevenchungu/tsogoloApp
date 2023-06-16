@@ -1,6 +1,7 @@
 package com.example.tsogolo.ui.home
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -41,6 +42,7 @@ class HomeViewModel : ViewModel() {
                         activeUser.value = users.first { it.id == activeUserId }
                     }
                     activePersonalities.value = db.personalityDao().getAllOf(activeUser.value.id!!)
+
 
                     this@HomeViewModel.careers.value = db.careerDao().getAllOf(activeUser.value.id!!)
 
