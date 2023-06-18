@@ -69,14 +69,18 @@ class JobsViewModel : ViewModel() {
 
                         if (activePersonalities.value.isNotEmpty()) {
                             val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type!!) // Pass the personalityType parameter here
-                            allJobs = fetchedJobs
-                            _jobs.value = fetchedJobs
+                            MainScope().launch {
+                                allJobs = fetchedJobs
+                                _jobs.value = fetchedJobs
+                            }
                             Log.d("Joblessss", activePersonalities.value[0].type!!)
 
                         } else {
                             val fetchedJobs = jobRepository.getJobs("INTJ") // Pass the personalityType parameter here
-                            allJobs = fetchedJobs
-                            _jobs.value = fetchedJobs
+                            MainScope().launch {
+                                allJobs = fetchedJobs
+                                _jobs.value = fetchedJobs
+                            }
                         }
                     }
                 }
@@ -89,7 +93,10 @@ class JobsViewModel : ViewModel() {
                 // For example, you can show an error message to the user
             }
             finally {
-                _isLoading.value = false
+                MainScope().launch {
+                    _isLoading.value = false
+                }
+
             }
         }
     }
