@@ -14,11 +14,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.content.Context
 import android.util.Log
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 
 class JobsViewModel : ViewModel() {
     private val jobRepository = JobRepository() // Assuming you have a JobRepository implementation
-     val _isLoading: MutableState<Boolean> = mutableStateOf(false)
+    val _isLoading: MutableState<Boolean> = mutableStateOf(false)
     val isLoading: State<Boolean>
         get() = _isLoading
 
@@ -50,7 +51,7 @@ class JobsViewModel : ViewModel() {
 
     fun loadJobs(context: Context) {
         _isLoading.value = true
-         db = TsogoloDatabase.getInstance(context)
+        db = TsogoloDatabase.getInstance(context)
 
         // Retrieve jobs from the repository or API using coroutines
         CoroutineScope(Dispatchers.IO).launch {
@@ -66,18 +67,28 @@ class JobsViewModel : ViewModel() {
                             activeUser.value = users.first { it.id == activeUserId }
                         }
                         activePersonalities.value = db.personalityDao().getAllOf(activeUser.value.id!!)
-                        Log.d("Job", activePersonalities.value.toString())
 
                         if (activePersonalities.value.isNotEmpty()) {
-                            val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].toString()) // Pass the personalityType parameter here
-                            allJobs = fetchedJobs
-                            _jobs.value = fetchedJobs
+                            val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type!!) // Pass the personalityType parameter here
+                            Log.d("Joblesize", fetchedJobs.size.toString())
+
+                            MainScope().launch {
+                                allJobs = fetchedJobs
+                                _jobs.value = fetchedJobs
+                                _isLoading.value = false
+                            }
                             Log.d("Joblessss", activePersonalities.value[0].type!!)
+                            Log.d("Joblesize", fetchedJobs.size.toString())
+
 
                         } else {
                             val fetchedJobs = jobRepository.getJobs("INTJ") // Pass the personalityType parameter here
-                            allJobs = fetchedJobs
-                            _jobs.value = fetchedJobs
+                            MainScope().launch {
+                                allJobs = fetchedJobs
+                                _jobs.value = fetchedJobs
+                                _isLoading.value = false
+
+                            }
                         }
                     }
                 }
@@ -89,7 +100,11 @@ class JobsViewModel : ViewModel() {
                 // For example, you can show an error message to the user
             }
             finally {
-                _isLoading.value = false
+                MainScope().launch {
+                    _isLoading.value = false
+                    Log.d("isLoading...", _isLoading.value.toString())
+                }
+
             }
         }
     }
@@ -116,8 +131,8 @@ class JobsViewModel : ViewModel() {
         }
         _jobs.value = jobs.filter {
             it.title.contains(searchQuery.value, ignoreCase = true) ||
-            it.sector.contains(searchQuery.value, ignoreCase = true) ||
-            it.location.contains(searchQuery.value, ignoreCase = true)
+                    it.sector.contains(searchQuery.value, ignoreCase = true) ||
+                    it.location.contains(searchQuery.value, ignoreCase = true)
         }
     }
 
