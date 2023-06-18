@@ -13,6 +13,7 @@ import com.example.tsogolo.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.content.Context
 import com.example.tsogolo.database.TsogoloDatabase
 import com.example.tsogolo.model.*
 
@@ -24,7 +25,7 @@ class JobsViewModel : ViewModel() {
     val activePersonalities: MutableState<List<Personality>> = mutableStateOf(listOf(Personality()))
     val activeUser: MutableState<User> = mutableStateOf(User())
     val users: MutableState<List<User>> = mutableStateOf(listOf(User()))
-    val db = TsogoloDatabase
+    var db: TsogoloDatabase
     val activePersonalities: MutableState<List<Personality>> = mutableStateOf(listOf(Personality()))
     val activeUser: MutableState<User> = mutableStateOf(User())
     val users: MutableState<List<User>> = mutableStateOf(listOf(User()))
@@ -45,16 +46,13 @@ class JobsViewModel : ViewModel() {
     val searchQuery: State<String>
         get() = _searchQuery
 
-    init  {
 
 
 
-        loadJobs()
-    }
-
-
-    fun loadJobs(personalityType: String) {
+    fun loadJobs(context: Context) {
         _isLoading.value = true
+         db = TsogoloDatabase.getInstance(this.applicationContext)
+
         // Retrieve jobs from the repository or API using coroutines
         CoroutineScope(Dispatchers.IO).launch {
 
