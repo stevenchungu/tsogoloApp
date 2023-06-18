@@ -69,7 +69,7 @@ class JobsViewModel : ViewModel() {
                         activePersonalities.value = db.personalityDao().getAllOf(activeUser.value.id!!)
 
                         if (activePersonalities.value.isNotEmpty()) {
-                            val fetchedJobs = jobRepository.getJobs(activePersonalities[0].type) // Pass the personalityType parameter here
+                            val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type) // Pass the personalityType parameter here
                             allJobs = fetchedJobs
                             _jobs.value = fetchedJobs
                         } else {
