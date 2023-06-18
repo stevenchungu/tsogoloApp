@@ -13,6 +13,8 @@ import com.example.tsogolo.network.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.example.tsogolo.database.TsogoloDatabase
+import com.example.tsogolo.model.*
 
 class JobsViewModel : ViewModel() {
     private val jobRepository = JobRepository() // Assuming you have a JobRepository implementation
@@ -23,8 +25,9 @@ class JobsViewModel : ViewModel() {
     val activeUser: MutableState<User> = mutableStateOf(User())
     val users: MutableState<List<User>> = mutableStateOf(listOf(User()))
     val db = TsogoloDatabase
-
-
+    val activePersonalities: MutableState<List<Personality>> = mutableStateOf(listOf(Personality()))
+    val activeUser: MutableState<User> = mutableStateOf(User())
+    val users: MutableState<List<User>> = mutableStateOf(listOf(User()))
 
     private val _jobs: MutableState<List<Job>> = mutableStateOf(listOf())
     val jobs: State<List<Job>>
@@ -43,7 +46,10 @@ class JobsViewModel : ViewModel() {
         get() = _searchQuery
 
     init  {
-        loadJobs("INTJ")
+
+
+
+        loadJobs()
     }
 
 
@@ -51,10 +57,32 @@ class JobsViewModel : ViewModel() {
         _isLoading.value = true
         // Retrieve jobs from the repository or API using coroutines
         CoroutineScope(Dispatchers.IO).launch {
+
             try {
-                val fetchedJobs = jobRepository.getJobs(personalityType) // Pass the personalityType parameter here
-                allJobs = fetchedJobs
-                _jobs.value = fetchedJobs
+                db.userDao().getAll().collectLatest { users ->
+                    this@JobsViewModel.users.value = users
+                    if (users.isNotEmpty()) {
+                        if (activeUserId == null) {
+                            activeUser.value = users[0]
+                            activeUserId = activeUser.value.id
+                        } else {
+                            activeUser.value = users.first { it.id == activeUserId }
+                        }
+                        activePersonalities.value = db.personalityDao().getAllOf(activeUser.value.id!!)
+
+                        if (activePersonalities.value.isNotEmpty()) {
+                            val fetchedJobs = jobRepository.getJobs(activePersonalities[0].type) // Pass the personalityType parameter here
+                            allJobs = fetchedJobs
+                            _jobs.value = fetchedJobs
+                        } else {
+                            val fetchedJobs = jobRepository.getJobs("INTJ") // Pass the personalityType parameter here
+                            allJobs = fetchedJobs
+                            _jobs.value = fetchedJobs
+                        }
+                    }
+                }
+
+
             } catch (e: Exception) {
                 // Handle any errors or exceptions here
                 // For example, you can show an error message to the user
