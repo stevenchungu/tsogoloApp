@@ -3,7 +3,6 @@ package com.example.tsogolo.ui.jobs
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tsogolo.database.TsogoloDatabase
 import com.example.tsogolo.model.Personality
@@ -14,21 +13,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.content.Context
-import com.example.tsogolo.database.TsogoloDatabase
-import com.example.tsogolo.model.*
+import android.util.Log
+import kotlinx.coroutines.flow.collectLatest
 
 class JobsViewModel : ViewModel() {
     private val jobRepository = JobRepository() // Assuming you have a JobRepository implementation
      val _isLoading: MutableState<Boolean> = mutableStateOf(false)
     val isLoading: State<Boolean>
         get() = _isLoading
+
+    lateinit var db: TsogoloDatabase
     val activePersonalities: MutableState<List<Personality>> = mutableStateOf(listOf(Personality()))
     val activeUser: MutableState<User> = mutableStateOf(User())
     val users: MutableState<List<User>> = mutableStateOf(listOf(User()))
-    var db: TsogoloDatabase
-    val activePersonalities: MutableState<List<Personality>> = mutableStateOf(listOf(Personality()))
-    val activeUser: MutableState<User> = mutableStateOf(User())
-    val users: MutableState<List<User>> = mutableStateOf(listOf(User()))
+    private var activeUserId: Int? = null
+
 
     private val _jobs: MutableState<List<Job>> = mutableStateOf(listOf())
     val jobs: State<List<Job>>
@@ -51,7 +50,7 @@ class JobsViewModel : ViewModel() {
 
     fun loadJobs(context: Context) {
         _isLoading.value = true
-         db = TsogoloDatabase.getInstance(this.applicationContext)
+         db = TsogoloDatabase.getInstance(context)
 
         // Retrieve jobs from the repository or API using coroutines
         CoroutineScope(Dispatchers.IO).launch {
@@ -69,9 +68,11 @@ class JobsViewModel : ViewModel() {
                         activePersonalities.value = db.personalityDao().getAllOf(activeUser.value.id!!)
 
                         if (activePersonalities.value.isNotEmpty()) {
-                            val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type) // Pass the personalityType parameter here
+                            val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type!!) // Pass the personalityType parameter here
                             allJobs = fetchedJobs
                             _jobs.value = fetchedJobs
+                            Log.d("Joblessss", activePersonalities.value[0].type!!)
+
                         } else {
                             val fetchedJobs = jobRepository.getJobs("INTJ") // Pass the personalityType parameter here
                             allJobs = fetchedJobs
@@ -79,6 +80,8 @@ class JobsViewModel : ViewModel() {
                         }
                     }
                 }
+                Log.d("Typeee", activePersonalities.value[0].type.toString())
+
 
 
             } catch (e: Exception) {
