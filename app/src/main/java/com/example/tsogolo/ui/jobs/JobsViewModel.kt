@@ -66,25 +66,21 @@ class JobsViewModel : ViewModel() {
                             activeUser.value = users.first { it.id == activeUserId }
                         }
                         activePersonalities.value = db.personalityDao().getAllOf(activeUser.value.id!!)
+                        Log.d("Job", activePersonalities.value.toString())
 
                         if (activePersonalities.value.isNotEmpty()) {
-                            val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type!!) // Pass the personalityType parameter here
-                            MainScope().launch {
-                                allJobs = fetchedJobs
-                                _jobs.value = fetchedJobs
-                            }
+                            val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].toString()) // Pass the personalityType parameter here
+                            allJobs = fetchedJobs
+                            _jobs.value = fetchedJobs
                             Log.d("Joblessss", activePersonalities.value[0].type!!)
 
                         } else {
                             val fetchedJobs = jobRepository.getJobs("INTJ") // Pass the personalityType parameter here
-                            MainScope().launch {
-                                allJobs = fetchedJobs
-                                _jobs.value = fetchedJobs
-                            }
+                            allJobs = fetchedJobs
+                            _jobs.value = fetchedJobs
                         }
                     }
                 }
-                Log.d("Typeee", activePersonalities.value[0].type.toString())
 
 
 
@@ -93,10 +89,7 @@ class JobsViewModel : ViewModel() {
                 // For example, you can show an error message to the user
             }
             finally {
-                MainScope().launch {
-                    _isLoading.value = false
-                }
-
+                _isLoading.value = false
             }
         }
     }
