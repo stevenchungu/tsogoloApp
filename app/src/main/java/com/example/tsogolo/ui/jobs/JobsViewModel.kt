@@ -16,6 +16,7 @@ import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
+import java.net.SocketTimeoutException
 
 class JobsViewModel : ViewModel() {
     private val jobRepository = JobRepository() // Assuming you have a JobRepository implementation
@@ -59,23 +60,35 @@ class JobsViewModel : ViewModel() {
             try {
                 db.userDao().getAll().collectLatest { users ->
                     this@JobsViewModel.users.value = users
+                    Log.d("TAG", "getInstance: josh ")
                     if (users.isNotEmpty()) {
+                        Log.d("TAG", "getInstance: josh1 ")
                         if (activeUserId == null) {
+                            Log.d("TAG", "getInstance: josh2 ")
                             activeUser.value = users[0]
                             activeUserId = activeUser.value.id
                         } else {
                             activeUser.value = users.first { it.id == activeUserId }
                         }
                         activePersonalities.value = db.personalityDao().getAllOf(activeUser.value.id!!)
-
+                        Log.d("TAG", "getInstance: josh$activePersonalities} ")
                         if (activePersonalities.value.isNotEmpty()) {
+                            Log.d("TAG", "getInstance: josh$activePersonalities} ")
                             val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type!!) // Pass the personalityType parameter here
-                            Log.d("Joblesize", fetchedJobs.size.toString())
+                            Log.d("TAG", "getInstance: joshPERSON$fetchedJobs} ")
+
+                            while (fetchedJobs.isEmpty()){
+                                Log.d("TAG", "getInstance: josh$activePersonalities} ")
+                                val fetchedJobs = jobRepository.getJobs(activePersonalities.value[0].type!!) // Pass the personalityType parameter here
+                                Log.d("TAG", "getInstance: joshPERSON$fetchedJobs} ")
+                            }
 
                             MainScope().launch {
+                                Log.d("TAG", "getInstance: joshs ")
                                 allJobs = fetchedJobs
                                 _jobs.value = fetchedJobs
                                 _isLoading.value = false
+                                Log.d("TAG", "getInstance: joshs ")
                             }
                             Log.d("Joblessss", activePersonalities.value[0].type!!)
                             Log.d("Joblesize", fetchedJobs.size.toString())
@@ -84,10 +97,14 @@ class JobsViewModel : ViewModel() {
                         } else {
                             val fetchedJobs = jobRepository.getJobs("INTJ") // Pass the personalityType parameter here
                             MainScope().launch {
+                                Log.d("TAG", "getInstance: josh ")
                                 allJobs = fetchedJobs
                                 _jobs.value = fetchedJobs
+                                Log.d("TAG", "getInstance: josh ")
+                                _isLoading.value = false
 
                             }
+                            Log.d("TAG", "getInstance: joshss ")
                         }
                     }
                     else {
@@ -95,7 +112,9 @@ class JobsViewModel : ViewModel() {
                         MainScope().launch {
                             allJobs = fetchedJobs
                             _jobs.value = fetchedJobs
+                            Log.d("TAG", "getInstance: joshe ")
                             _isLoading.value = false
+                            Log.d("TAG", "getInstance: joshes ")
 
                         }
                     }
@@ -103,10 +122,14 @@ class JobsViewModel : ViewModel() {
 
 
 
+            }catch (e: SocketTimeoutException) {
+                // Handle timeout exception
+                // Show an error message to the user or provide a retry mechanism
+                Log.e("Jobs", "Errors", e)
             } catch (e: Exception) {
                 // Handle any errors or exceptions here
                 // For example, you can show an error message to the user
-                Log.e("Jobs", "Error", e)
+//                Log.e("Jobs", "Error", e)
             }
             finally {
                 MainScope().launch {
