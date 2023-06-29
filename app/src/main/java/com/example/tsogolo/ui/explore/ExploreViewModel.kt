@@ -33,6 +33,7 @@ class ExploreViewModel : ViewModel() {
     private lateinit var db: TsogoloDatabase
     //    private lateinit var db: TsogoloDatabase
     private var _careers: List<Career> = listOf()
+    private var _career: List<Career> = listOf()
 
     var isInitialized: Boolean by mutableStateOf(false) // Flag to track initialization status
 
@@ -51,7 +52,8 @@ class ExploreViewModel : ViewModel() {
                 val careerCategory = db.categoryDao().careerCategor()
 
                 career.value = db.careerDao().getAll()
-
+                _career = db.careerDao().getAll()
+                mapCareers()
 
                 categor.value = categoryList
                 mapCareers()
@@ -106,7 +108,7 @@ class ExploreViewModel : ViewModel() {
 
     private fun mapCareers() {
         CoroutineScope(Dispatchers.Default).launch {
-            this@ExploreViewModel.careers.value = filtered(_careers.map { career ->
+            this@ExploreViewModel.careers.value = filtered(_career.map { career ->
 
                 CareerData(
                     id = career.id!!,

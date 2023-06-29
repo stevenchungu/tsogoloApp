@@ -35,8 +35,9 @@ fun exploreCareer(
 ) {
     val context = LocalContext.current
     val categoryList by exploreViewModel.categor
+    val searchActive = remember { mutableStateOf(false) }
     var showLoader by remember { mutableStateOf(true) }
-    val careers = exploreViewModel.career.value
+    val careers = exploreViewModel.careers.value
 
     LaunchedEffect(Unit) {
         exploreViewModel.initialize(context)
@@ -44,30 +45,68 @@ fun exploreCareer(
         showLoader = false
     }
 
-    Column(modifier = Modifier.background(color = MaterialTheme.colors.background).fillMaxSize()) {
+    Column(modifier = Modifier
+        .background(color = MaterialTheme.colors.background)
+        .fillMaxSize()) {
+
+        if (searchActive.value) {
+            // Display the search row
+            TextField(
+                value = exploreViewModel.keyword.value,
+                onValueChange = { exploreViewModel.onKeywordChange(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                placeholder = { Text(text = "Search") },
+                trailingIcon = {
+                    IconButton(onClick = { searchActive.value = false }) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Cancel",
+                            tint = Color.Black
+                        )
+                    }
+                },
+                singleLine = true,
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface),
+                textStyle = MaterialTheme.typography.body1
+            )
+        } else {
+            TopAppBar(
+                title = {
+
+                    Text("Categories")
+
+                },
+                backgroundColor = MaterialTheme.colors.background,
+                contentColor = Color.Black,
+                navigationIcon = {
+
+                    IconButton(onClick = { backArrowClicked() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back Arrow",
+                            tint = Color.Black
+                        )
+                    }
+
+                },
+                actions = {
+                    // Display the search icon
+                    IconButton(onClick = { searchActive.value = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search",
+                            tint = Color.Black
+                        )
+                    }
 
 
-        TopAppBar(
-            title = {
 
-                Text("Categories")
-
-            },
-            backgroundColor = MaterialTheme.colors.background,
-            contentColor = Color.Black,
-            navigationIcon = {
-
-                IconButton(onClick = { backArrowClicked() }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back Arrow",
-                        tint = Color.Black
-                    )
                 }
 
-            }
-
-        )
+            )
+        }
         Divider(modifier = Modifier.padding(vertical = 4.dp))
 
         Column(modifier = Modifier.padding(horizontal = 2.dp)) {
@@ -172,7 +211,10 @@ fun exploreCareer(
                                 .clickable {
                                     career.id.let {
                                         Log.d("CategoryViewModel", "tione: ${career.id}")
-                                        val intent = Intent(context, CareerDescriptionActivity::class.java).apply {
+                                        val intent = Intent(
+                                            context,
+                                            CareerDescriptionActivity::class.java
+                                        ).apply {
                                             putExtra("careerId", career.id)
                                         }
                                         context.startActivity(intent)
@@ -193,7 +235,9 @@ fun exploreCareer(
             } else {
                 Text(
                     text = "No categories available",
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                     textAlign = TextAlign.Center
                 )
             }
@@ -224,7 +268,11 @@ fun CareerCategoryList(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(2.dp)
-                        .clickable(enabled = exploreViewModel.isInitialized) { onCategoryClicked(category.id.toString()) },
+                        .clickable(enabled = exploreViewModel.isInitialized) {
+                            onCategoryClicked(
+                                category.id.toString()
+                            )
+                        },
                     elevation = 4.dp
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -242,7 +290,10 @@ fun CareerCategoryList(
                             modifier = Modifier
                                 .clickable {
                                     career.id.let {
-                                        val intent = Intent(context, CareerDescriptionActivity::class.java).apply {
+                                        val intent = Intent(
+                                            context,
+                                            CareerDescriptionActivity::class.java
+                                        ).apply {
                                             putExtra("careerId", it)
                                         }
                                         context.startActivity(intent)
