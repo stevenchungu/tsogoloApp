@@ -15,12 +15,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import com.example.tsogolo.R
 import com.example.tsogolo.models.Job
 import com.example.tsogolo.ui.theme.TsogoloTheme
+import com.example.tsogolo.ui.theme.Typography
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.sp
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.*
+import androidx.core.content.ContextCompat.startActivity
 
 class JobDetailsActivity : ComponentActivity() {
 
@@ -103,14 +113,24 @@ fun JobDetailsScreen(job: Job, activity: ComponentActivity? = null) {
                     )
                     Text(
                         text = "Job Description",
-                        style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        style = Typography.body2.copy(
+                            color = MaterialTheme.colors.onSurface,
+
+                            ),
+                        modifier = Modifier.padding(16.dp),
+                        textAlign = TextAlign.Center
                     )
                     Text(
                         text = job.summary,
                         style = MaterialTheme.typography.body1,
                         fontSize = 16.sp
                     )
+
+                    // Inside the Compose function
+                    OpenLinkInBrowser(job.link)
+
+
+
                 }
             }
 
@@ -119,3 +139,33 @@ fun JobDetailsScreen(job: Job, activity: ComponentActivity? = null) {
     }
 }
 
+@Composable
+fun OpenLinkInBrowser(link: String) {
+    val context = LocalContext.current
+
+    val annotatedString = buildAnnotatedString {
+        withStyle(style = SpanStyle(color = Color.Black)) {
+            append("Link: ")
+        }
+        append("\n")
+        pushStyle(
+            SpanStyle(
+            color = Color.Blue,
+            textDecoration = TextDecoration.Underline
+        )
+        )
+        append(link)
+    }
+
+    ClickableText(
+        text = annotatedString,
+        onClick = {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(link)
+            context.startActivity(intent)
+        },
+        style = MaterialTheme.typography.body1.merge(
+            TextStyle(fontSize = 16.sp)
+        )
+    )
+}

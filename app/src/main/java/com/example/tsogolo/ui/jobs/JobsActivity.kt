@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -22,9 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tsogolo.R
@@ -105,10 +111,43 @@ class JobsActivity : ComponentActivity() {
                                     }
                                 }
                             } else {
-                                // Display the list of jobs
-                                items(viewModel.jobs.value.size) { job ->
-                                    JobItem(job = viewModel.jobs.value[job], activity = this@JobsActivity)
-                                    Spacer(modifier = Modifier.size(8.dp))
+                                if (viewModel.jobs.value.isEmpty()) {
+                                    // Display a network error message and a retry link
+                                    item {
+                                        Column(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally,
+                                            verticalArrangement = Arrangement.Center
+                                        ) {
+                                            Text(text = "Network error. Please check your connection.")
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            ClickableText(
+                                                text = buildAnnotatedString {
+                                                    withStyle(
+                                                        style = SpanStyle(
+                                                            color = Color.Blue,
+                                                            textDecoration = TextDecoration.Underline
+                                                        )
+                                                    ) {
+                                                        append("Retry")
+                                                    }
+                                                },
+                                                onClick = {
+                                                    viewModel.loadJobs(this@JobsActivity)
+                                                }
+                                            )
+
+                                        }
+                                    }
+                                } else {
+                                    // Display the list of jobs
+                                    items(viewModel.jobs.value.size) { job ->
+                                        JobItem(
+                                            job = viewModel.jobs.value[job],
+                                            activity = this@JobsActivity
+                                        )
+                                        Spacer(modifier = Modifier.size(8.dp))
+                                    }
                                 }
                             }
                         }

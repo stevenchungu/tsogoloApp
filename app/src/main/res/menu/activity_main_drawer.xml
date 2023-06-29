@@ -9,14 +9,6 @@
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_blog"
-            android:icon="@drawable/ic_baseline_article_24"
-            android:title="@string/menu_role_models" />
-        <item
-            android:id="@+id/nav_about"
-            android:icon="@drawable/ic_baseline_info_24"
-            android:title="@string/menu_about" />
-        <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_baseline_close_24"
             android:title="@string/menu_exit" />
