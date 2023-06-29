@@ -86,7 +86,6 @@ class JobsViewModel : ViewModel() {
                             MainScope().launch {
                                 allJobs = fetchedJobs
                                 _jobs.value = fetchedJobs
-                                _isLoading.value = false
 
                             }
                         }
