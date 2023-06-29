@@ -24,7 +24,7 @@ class ExploreViewModel : ViewModel() {
     val keyword: MutableState<String> = mutableStateOf("")
     val selectedCareers: MutableState<List<Career>> = mutableStateOf(listOf())
     val careers: MutableState<List<CareerData>> = mutableStateOf(listOf())
-    val career: MutableState<List<Career>> = mutableStateOf(listOf())
+    val career: MutableState<List<CareerData>> = mutableStateOf(listOf())
     //    val career: MutableState<List<CareerData>> = mutableStateOf(listOf())
     var selectedCategoryId: Int? by mutableStateOf(null)
 
@@ -51,12 +51,14 @@ class ExploreViewModel : ViewModel() {
                 val categoryList = db.categoryDao().getAll()
                 val careerCategory = db.categoryDao().careerCategor()
 
-                career.value = db.careerDao().getAll()
+//                career.value = db.careerDao().getAll()
                 _career = db.careerDao().getAll()
-                mapCareers()
+//                mapCareers()
 
                 categor.value = categoryList
+                mapCareer()
                 mapCareers()
+
 
                 isInitialized = true
 //                careerCategor.value = careerCategory
@@ -82,33 +84,25 @@ class ExploreViewModel : ViewModel() {
         }
     }
 
-//    val filteredCareers: List<CareerData>
-//        get() {
-//            val selectedId = selectedCategoryId
-//            return if (selectedId != null) {
-//                careers.value.filter { it.categoryId == selectedId }
-//            } else {
-//                careers.value
-//            }
-//        }
-
-//    val filteredCareers: List<CareerData>
-//        get() {
-//            val selectedId = selectedCategoryId
-//            return if (selectedId != null) {
-//                careers.value.filter { career ->
-//                    // Apply your custom logic to filter based on selectedId
-//                    // For example, you can check if the career's title contains the selectedId
-//                    career.title.contains(selectedId.toString(), ignoreCase = true)
-//                }
-//            } else {
-//                careers.value
-//            }
-//        }
 
     private fun mapCareers() {
         CoroutineScope(Dispatchers.Default).launch {
-            this@ExploreViewModel.careers.value = filtered(_career.map { career ->
+            this@ExploreViewModel.careers.value = filtered(_careers.map { career ->
+
+                CareerData(
+                    id = career.id!!,
+                    title = career.title ?: "Unknown",
+                    aas = career.aas,
+                    description = career.description
+                )
+            })
+            Log.d("ExploreViewModel", "launcher: $keyword")
+        }
+    }
+
+    private fun mapCareer() {
+        CoroutineScope(Dispatchers.Default).launch {
+            this@ExploreViewModel.career.value = filtered(_career.map { career ->
 
                 CareerData(
                     id = career.id!!,
@@ -127,18 +121,20 @@ class ExploreViewModel : ViewModel() {
         Log.d("ExploreViewModel", "Changed: $keyword")
         // Perform filtering and update the careers list
         mapCareers()
+        mapCareer()
     }
 
     fun filterByGradesClicked() {
         filterByGrades.value = true; // Update the value of filterByGrades
         filterByCat.value = false;
-        mapCareers();
+        mapCareer();
     }
 
     fun filterByCatClicked() {
         filterByCat.value = true; // Update the value of filterByGrades
         filterByGrades.value = false;
         mapCareers();
+
     }
 }
 
