@@ -91,6 +91,15 @@ class JobsViewModel : ViewModel() {
                             }
                         }
                     }
+                    else {
+                        val fetchedJobs = jobRepository.getJobs("INTJ") // Pass the personalityType parameter here
+                        MainScope().launch {
+                            allJobs = fetchedJobs
+                            _jobs.value = fetchedJobs
+                            _isLoading.value = false
+
+                        }
+                    }
                 }
 
 
@@ -98,6 +107,7 @@ class JobsViewModel : ViewModel() {
             } catch (e: Exception) {
                 // Handle any errors or exceptions here
                 // For example, you can show an error message to the user
+                Log.e("Jobs", "Error", e)
             }
             finally {
                 MainScope().launch {
